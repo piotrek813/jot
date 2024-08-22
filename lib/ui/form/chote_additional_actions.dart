@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:jot/service/file_service.dart';
+import 'package:jot_notes/service/file_service.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'chote_additional_actions.g.dart';

@@ -66,4 +66,5 @@ class DefaultFirebaseOptions {
     projectId: 'notes-8fa56',
     storageBucket: 'notes-8fa56.appspot.com',
   );
+
 }

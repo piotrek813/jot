@@ -1,12 +1,13 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_signin_button/flutter_signin_button.dart';
-import 'package:jot/service/auth_service.dart/auth_service.dart';
-import 'package:jot/ui/appbar.dart';
-import 'package:jot/ui/chote/chotes_list.dart';
-import 'package:jot/ui/form/chote_additional_actions.dart';
-import 'package:jot/ui/form/form.dart';
+import 'package:jot_notes/login_screen.dart';
+import 'package:jot_notes/service/auth_service.dart/auth_service.dart';
+import 'package:jot_notes/ui/appbar.dart';
+import 'package:jot_notes/ui/chote/chote_tile.dart';
+import 'package:jot_notes/ui/chote/chotes_list.dart';
+import 'package:jot_notes/ui/form/chote_additional_actions.dart';
+import 'package:jot_notes/ui/form/form.dart';
 
 import 'config/firebase_options.dart';
 
@@ -25,43 +26,35 @@ class MyApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final bool isAuthenticated = ref.watch(isAuthenticatedProvider);
+    final isAuthenticated = ref.watch(authStateChangesProvider);
     return MaterialApp(
         title: 'Notes',
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: const Color(0x00676df4)),
           useMaterial3: true,
         ),
-        home: isAuthenticated ? const NotesChat() : const LoginScreen());
+        home: isAuthenticated.when(
+            data: (user) {
+              if (user != null) {
+                return const NotesChat();
+              } else {
+                return const LoginScreen();
+              }
+            },
+            error: (_, __) => const Placeholder(),
+            loading: () => const Placeholder()));
   }
 }
 
-class LoginScreen extends ConsumerWidget {
-  const LoginScreen({super.key});
+class NotesChat extends ConsumerWidget {
+  const NotesChat({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-        body: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Center(
-          child: SignInButton(Buttons.Google,
-              onPressed: () =>
-                  ref.watch(authServiceProvider).singInWithGoogle()),
-        ),
-      ],
-    ));
-  }
-}
-
-class NotesChat extends StatelessWidget {
-  const NotesChat({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: const ChatAppBar(),
+      appBar: ref.watch(areChotesSelectedProvider)
+          ? const SelectOptionsdAppBar()
+          : const ChatAppBar(),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
@@ -69,10 +62,16 @@ class NotesChat extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             const Expanded(child: ChotesList()),
-            const ChotePickedFiles(),
-            ConstrainedBox(
-                constraints: const BoxConstraints(maxHeight: 200),
-                child: const ChatForm()),
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const ChotePickedFiles(),
+                ConstrainedBox(
+                    constraints: const BoxConstraints(maxHeight: 200),
+                    child: const ChatForm()),
+              ],
+            ),
             const ChoteAdditionalActions(),
           ],
         ),

@@ -2,12 +2,12 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:jot/config/colors.dart';
-import 'package:jot/model/chote.dart';
-import 'package:jot/service/chote_service.dart';
-import 'package:jot/service/file_service.dart';
-import 'package:jot/ui/form/chote_additional_actions.dart';
-import 'package:jot/ui/form/edit_text_field.dart';
+import 'package:jot_notes/config/colors.dart';
+import 'package:jot_notes/model/chote.dart';
+import 'package:jot_notes/service/chote_service.dart';
+import 'package:jot_notes/service/file_service.dart';
+import 'package:jot_notes/ui/form/chote_additional_actions.dart';
+import 'package:jot_notes/ui/form/edit_text_field.dart';
 import 'package:rich_text_controller/rich_text_controller.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -45,13 +45,18 @@ class ChatForm extends ConsumerStatefulWidget {
 
 class _ChatFormState extends ConsumerState<ChatForm> {
   final formKey = GlobalKey<FormState>();
-
-  final choteController = RichTextController(onMatch: (_) {}, targetMatches: [
-    MatchTargetItem(
-        style: const TextStyle(fontWeight: FontWeight.bold),
-        regex: RegExp(
-            r'([jJ]utro|pojutrze|za\s+\S+\s+dni)|([1-2][0-9]|[0]?[1-9]|[3][0-1])\.([0]?[1-9]|[1][0-2])\.[1-9][0-9]{3}'))
-  ]);
+  final choteController = RichTextController(
+      onMatch: (_) {
+        print("cdscscss");
+      },
+      targetMatches: [
+        // MatchTargetItem(
+        //     allowInlineMatching: true,
+        //     style: const TextStyle(
+        //       color: Colors.blue,
+        //     ),
+        //     regex: RegExp(r'(#\S+)'))
+      ]);
 
   @override
   void initState() {
@@ -78,7 +83,7 @@ class _ChatFormState extends ConsumerState<ChatForm> {
 
     final chote = Chote(
         text: choteController.text, files: ref.read(choteFilePickerProvider));
-    ref.read(choteServiceProvider).add(chote);
+    ref.read(choteServiceProvider).save(chote);
     ref.read(choteFilePickerProvider.notifier).clear();
     choteController.clear();
   }
@@ -86,7 +91,7 @@ class _ChatFormState extends ConsumerState<ChatForm> {
   @override
   Widget build(BuildContext context) {
     final editedChote = ref.watch(editedChoteProvider);
-
+    final isFormDisabled = ref.watch(isFormDisabledProvider).disabled;
     if (editedChote != null) return const ChoteEditTextField();
 
     return Form(
@@ -96,15 +101,50 @@ class _ChatFormState extends ConsumerState<ChatForm> {
           children: [
             Expanded(
                 child: ChoteTextField(
+              suffixIcon: !isFormDisabled
+                  ? const ChoteAdditionalActionsButton(
+                      onDark: false,
+                    )
+                  : null,
               onTap: () =>
                   ref.read(showAdditionalActionsProvider.notifier).hide(),
               controller: choteController,
             )),
-            ChoteActionButton(
-                submit: submit,
-                disabled: ref.watch(isFormDisabledProvider).disabled),
+            ChoteActionButton(submit: submit, disabled: isFormDisabled),
           ],
         ));
+  }
+}
+
+class ChoteSubmitButton extends StatelessWidget {
+  const ChoteSubmitButton({required this.submit, super.key});
+  final Function() submit;
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+        color: AacColors.white,
+        onPressed: submit,
+        icon: const Icon(Icons.send_rounded));
+  }
+}
+
+class ChoteAdditionalActionsButton extends ConsumerWidget {
+  const ChoteAdditionalActionsButton({super.key, required this.onDark});
+
+  final bool onDark;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return IconButton(
+        color: onDark ? AacColors.white : null,
+        onPressed: () {
+          ref.read(showAdditionalActionsProvider.notifier).toggle();
+
+          // hides keyboard
+          FocusManager.instance.primaryFocus?.unfocus();
+        },
+        icon: const Icon(Icons.add));
   }
 }
 
@@ -132,10 +172,11 @@ class ChoteActionButton extends ConsumerWidget {
     return Ink(
         decoration: const ShapeDecoration(
             shape: CircleBorder(), color: AacColors.primary),
-        child: IconButton(
-            color: AacColors.white,
-            onPressed: () => onPressed(ref),
-            icon: Icon(disabled ? Icons.add : Icons.send_rounded)));
+        child: disabled
+            ? const ChoteAdditionalActionsButton(
+                onDark: true,
+              )
+            : ChoteSubmitButton(submit: submit));
   }
 }
 

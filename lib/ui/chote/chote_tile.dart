@@ -1,16 +1,77 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:jot/model/chote.dart';
-import 'package:jot/ui/chote/chote_tile_images.dart';
-import 'package:jot/ui/chote/chote_tile_text.dart';
-import 'package:jot/ui/form/edit_text_field.dart';
+import 'package:jot_notes/model/chote.dart';
+import 'package:jot_notes/ui/chote/chote_tile_images.dart';
+import 'package:jot_notes/ui/chote/chote_tile_text.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'chote_tile.g.dart';
 
 @riverpod
 Chote currentChote(CurrentChoteRef ref) {
   throw UnimplementedError();
+}
+
+@riverpod
+class SelectedChotes extends _$SelectedChotes {
+  @override
+  List<Chote> build() {
+    return [];
+  }
+
+  void add(Chote chote) {
+    for (final c in state) {
+      if (c.id == chote.id) {
+        return remove(chote);
+      }
+    }
+
+    state = [...state, chote];
+  }
+
+  void remove(Chote chote) {
+    state = [
+      for (final c in state)
+        if (c.id != chote.id) c
+    ];
+  }
+
+  void clear() {
+    state = [];
+  }
+}
+
+@riverpod
+bool areChotesSelected(AreChotesSelectedRef ref) {
+  return ref.watch(selectedChotesProvider).isNotEmpty;
+}
+
+class ChoteGestureDetector extends ConsumerWidget {
+  const ChoteGestureDetector({required this.child, super.key});
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return GestureDetector(
+        onLongPress: () => _onLongPress(ref),
+        onTap: () => _onTap(ref),
+        child: AbsorbPointer(
+          absorbing: ref.watch(areChotesSelectedProvider),
+          child: child,
+        ));
+  }
+
+  _onTap(WidgetRef ref) {
+    if (ref.read(areChotesSelectedProvider)) {
+      final chote = ref.read(currentChoteProvider);
+      ref.watch(selectedChotesProvider.notifier).add(chote);
+    }
+  }
+
+  _onLongPress(WidgetRef ref) {
+    final chote = ref.read(currentChoteProvider);
+    ref.watch(selectedChotesProvider.notifier).add(chote);
+  }
 }
 
 class ChoteTile extends ConsumerWidget {
@@ -25,11 +86,8 @@ class ChoteTile extends ConsumerWidget {
       confirmDismiss: (_) => Future.value(false),
       onUpdate: (details) {
         if (!details.reached) return;
-
-        ref.read(editedChoteProvider.notifier).state = chote;
       },
-      child: GestureDetector(
-        onLongPress: _onLongPress,
+      child: ChoteGestureDetector(
         child: Padding(
           padding: const EdgeInsets.only(bottom: 4.0),
           child: Column(
@@ -51,6 +109,4 @@ class ChoteTile extends ConsumerWidget {
       ),
     );
   }
-
-  void _onLongPress() {}
 }

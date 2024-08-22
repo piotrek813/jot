@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:jot/service/chote_service.dart';
-import 'package:jot/ui/chote/chote_tile.dart';
+import 'package:jot_notes/service/chote_service.dart';
+import 'package:jot_notes/ui/chote/chote_tile.dart';
 
 class ChotesList extends ConsumerWidget {
   const ChotesList({super.key});

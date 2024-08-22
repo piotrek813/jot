@@ -24,7 +24,11 @@ dependencies:
   rich_text_controller: ^2.0.1
   shared_preferences: ^2.2.3
   firebase_auth: ^5.1.4
-  flutter_signin_button: ^2.0.0
+  google_sign_in: ^6.2.1
+  firebase_ui_auth: ^1.15.0
+  sign_in_button: ^3.0.0
+  firebase_cached_image: ^0.6.1
+
 
 dev_dependencies:
   flutter_test:

@@ -6,7 +6,7 @@ part of 'chote_service.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$choteServiceHash() => r'9484fbde8e74081e10b64f15e462a0b4e1335f7c';
+String _$choteServiceHash() => r'7a8260d7d74ad11124fa7f04ba162f4ca36442b6';
 
 /// See also [choteService].
 @ProviderFor(choteService)

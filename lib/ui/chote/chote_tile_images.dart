@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:jot/config/colors.dart';
-import 'package:jot/ui/chote/chote_image.dart';
-import 'package:jot/ui/chote/chote_tile.dart';
+import 'package:jot_notes/config/colors.dart';
+import 'package:jot_notes/ui/chote/chote_image.dart';
+import 'package:jot_notes/ui/chote/chote_tile.dart';
 
 class ChoteTileImages extends ConsumerWidget {
   const ChoteTileImages({super.key});

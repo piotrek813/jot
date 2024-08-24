@@ -11,8 +11,7 @@ _$ChoteImpl _$$ChoteImplFromJson(Map<String, dynamic> json) => _$ChoteImpl(
       createdDate: json['createdDate'] == null
           ? null
           : DateTime.parse(json['createdDate'] as String),
-      id: json['id'] as String?,
-      ownerId: json['ownerId'] as String?,
+      id: (json['id'] as num?)?.toInt(),
       files: (json['files'] as List<dynamic>?)?.map((e) => e as String).toSet(),
     );
 
@@ -21,6 +20,5 @@ Map<String, dynamic> _$$ChoteImplToJson(_$ChoteImpl instance) =>
       'text': instance.text,
       'createdDate': instance.createdDate?.toIso8601String(),
       'id': instance.id,
-      'ownerId': instance.ownerId,
       'files': instance.files?.toList(),
     };

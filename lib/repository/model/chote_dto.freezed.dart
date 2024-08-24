@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'chote.dart';
+part of 'chote_dto.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -14,34 +14,34 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
-Chote _$ChoteFromJson(Map<String, dynamic> json) {
-  return _Chote.fromJson(json);
+ChoteDto _$ChoteDtoFromJson(Map<String, dynamic> json) {
+  return _ChoteDto.fromJson(json);
 }
 
 /// @nodoc
-mixin _$Chote {
+mixin _$ChoteDto {
   String get text => throw _privateConstructorUsedError;
-  DateTime? get createdDate => throw _privateConstructorUsedError;
+  int? get createdDate => throw _privateConstructorUsedError;
   int? get id => throw _privateConstructorUsedError;
-  Set<String>? get files => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $ChoteCopyWith<Chote> get copyWith => throw _privateConstructorUsedError;
+  $ChoteDtoCopyWith<ChoteDto> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $ChoteCopyWith<$Res> {
-  factory $ChoteCopyWith(Chote value, $Res Function(Chote) then) =
-      _$ChoteCopyWithImpl<$Res, Chote>;
+abstract class $ChoteDtoCopyWith<$Res> {
+  factory $ChoteDtoCopyWith(ChoteDto value, $Res Function(ChoteDto) then) =
+      _$ChoteDtoCopyWithImpl<$Res, ChoteDto>;
   @useResult
-  $Res call({String text, DateTime? createdDate, int? id, Set<String>? files});
+  $Res call({String text, int? createdDate, int? id});
 }
 
 /// @nodoc
-class _$ChoteCopyWithImpl<$Res, $Val extends Chote>
-    implements $ChoteCopyWith<$Res> {
-  _$ChoteCopyWithImpl(this._value, this._then);
+class _$ChoteDtoCopyWithImpl<$Res, $Val extends ChoteDto>
+    implements $ChoteDtoCopyWith<$Res> {
+  _$ChoteDtoCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -54,7 +54,6 @@ class _$ChoteCopyWithImpl<$Res, $Val extends Chote>
     Object? text = null,
     Object? createdDate = freezed,
     Object? id = freezed,
-    Object? files = freezed,
   }) {
     return _then(_value.copyWith(
       text: null == text
@@ -64,35 +63,32 @@ class _$ChoteCopyWithImpl<$Res, $Val extends Chote>
       createdDate: freezed == createdDate
           ? _value.createdDate
           : createdDate // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
+              as int?,
       id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int?,
-      files: freezed == files
-          ? _value.files
-          : files // ignore: cast_nullable_to_non_nullable
-              as Set<String>?,
     ) as $Val);
   }
 }
 
 /// @nodoc
-abstract class _$$ChoteImplCopyWith<$Res> implements $ChoteCopyWith<$Res> {
-  factory _$$ChoteImplCopyWith(
-          _$ChoteImpl value, $Res Function(_$ChoteImpl) then) =
-      __$$ChoteImplCopyWithImpl<$Res>;
+abstract class _$$ChoteDtoImplCopyWith<$Res>
+    implements $ChoteDtoCopyWith<$Res> {
+  factory _$$ChoteDtoImplCopyWith(
+          _$ChoteDtoImpl value, $Res Function(_$ChoteDtoImpl) then) =
+      __$$ChoteDtoImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String text, DateTime? createdDate, int? id, Set<String>? files});
+  $Res call({String text, int? createdDate, int? id});
 }
 
 /// @nodoc
-class __$$ChoteImplCopyWithImpl<$Res>
-    extends _$ChoteCopyWithImpl<$Res, _$ChoteImpl>
-    implements _$$ChoteImplCopyWith<$Res> {
-  __$$ChoteImplCopyWithImpl(
-      _$ChoteImpl _value, $Res Function(_$ChoteImpl) _then)
+class __$$ChoteDtoImplCopyWithImpl<$Res>
+    extends _$ChoteDtoCopyWithImpl<$Res, _$ChoteDtoImpl>
+    implements _$$ChoteDtoImplCopyWith<$Res> {
+  __$$ChoteDtoImplCopyWithImpl(
+      _$ChoteDtoImpl _value, $Res Function(_$ChoteDtoImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -101,9 +97,8 @@ class __$$ChoteImplCopyWithImpl<$Res>
     Object? text = null,
     Object? createdDate = freezed,
     Object? id = freezed,
-    Object? files = freezed,
   }) {
-    return _then(_$ChoteImpl(
+    return _then(_$ChoteDtoImpl(
       text: null == text
           ? _value.text
           : text // ignore: cast_nullable_to_non_nullable
@@ -111,102 +106,81 @@ class __$$ChoteImplCopyWithImpl<$Res>
       createdDate: freezed == createdDate
           ? _value.createdDate
           : createdDate // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
+              as int?,
       id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int?,
-      files: freezed == files
-          ? _value._files
-          : files // ignore: cast_nullable_to_non_nullable
-              as Set<String>?,
     ));
   }
 }
 
 /// @nodoc
 @JsonSerializable()
-class _$ChoteImpl extends _Chote {
-  const _$ChoteImpl(
-      {required this.text, this.createdDate, this.id, final Set<String>? files})
-      : _files = files,
-        super._();
+class _$ChoteDtoImpl implements _ChoteDto {
+  const _$ChoteDtoImpl({required this.text, this.createdDate, this.id});
 
-  factory _$ChoteImpl.fromJson(Map<String, dynamic> json) =>
-      _$$ChoteImplFromJson(json);
+  factory _$ChoteDtoImpl.fromJson(Map<String, dynamic> json) =>
+      _$$ChoteDtoImplFromJson(json);
 
   @override
   final String text;
   @override
-  final DateTime? createdDate;
+  final int? createdDate;
   @override
   final int? id;
-  final Set<String>? _files;
-  @override
-  Set<String>? get files {
-    final value = _files;
-    if (value == null) return null;
-    if (_files is EqualUnmodifiableSetView) return _files;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableSetView(value);
-  }
 
   @override
   String toString() {
-    return 'Chote(text: $text, createdDate: $createdDate, id: $id, files: $files)';
+    return 'ChoteDto(text: $text, createdDate: $createdDate, id: $id)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$ChoteImpl &&
+            other is _$ChoteDtoImpl &&
             (identical(other.text, text) || other.text == text) &&
             (identical(other.createdDate, createdDate) ||
                 other.createdDate == createdDate) &&
-            (identical(other.id, id) || other.id == id) &&
-            const DeepCollectionEquality().equals(other._files, _files));
+            (identical(other.id, id) || other.id == id));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, text, createdDate, id,
-      const DeepCollectionEquality().hash(_files));
+  int get hashCode => Object.hash(runtimeType, text, createdDate, id);
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$ChoteImplCopyWith<_$ChoteImpl> get copyWith =>
-      __$$ChoteImplCopyWithImpl<_$ChoteImpl>(this, _$identity);
+  _$$ChoteDtoImplCopyWith<_$ChoteDtoImpl> get copyWith =>
+      __$$ChoteDtoImplCopyWithImpl<_$ChoteDtoImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$ChoteImplToJson(
+    return _$$ChoteDtoImplToJson(
       this,
     );
   }
 }
 
-abstract class _Chote extends Chote {
-  const factory _Chote(
+abstract class _ChoteDto implements ChoteDto {
+  const factory _ChoteDto(
       {required final String text,
-      final DateTime? createdDate,
-      final int? id,
-      final Set<String>? files}) = _$ChoteImpl;
-  const _Chote._() : super._();
+      final int? createdDate,
+      final int? id}) = _$ChoteDtoImpl;
 
-  factory _Chote.fromJson(Map<String, dynamic> json) = _$ChoteImpl.fromJson;
+  factory _ChoteDto.fromJson(Map<String, dynamic> json) =
+      _$ChoteDtoImpl.fromJson;
 
   @override
   String get text;
   @override
-  DateTime? get createdDate;
+  int? get createdDate;
   @override
   int? get id;
   @override
-  Set<String>? get files;
-  @override
   @JsonKey(ignore: true)
-  _$$ChoteImplCopyWith<_$ChoteImpl> get copyWith =>
+  _$$ChoteDtoImplCopyWith<_$ChoteDtoImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

@@ -82,7 +82,7 @@ class ChoteTile extends ConsumerWidget {
     final chote = ref.watch(currentChoteProvider);
     return Dismissible(
       direction: DismissDirection.startToEnd,
-      key: Key(chote.id!),
+      key: Key("${chote.id!}"),
       confirmDismiss: (_) => Future.value(false),
       onUpdate: (details) {
         if (!details.reached) return;

@@ -28,6 +28,7 @@ dependencies:
   firebase_ui_auth: ^1.15.0
   sign_in_button: ^3.0.0
   firebase_cached_image: ^0.6.1
+  sqflite: ^2.3.3+1
 
 
 dev_dependencies:

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:jot_notes/service/auth_service.dart/auth_service.dart';
 import 'package:jot_notes/service/chote_service.dart';
 import 'package:jot_notes/ui/chote/chote_tile.dart';
 import 'package:jot_notes/ui/form/edit_text_field.dart';
@@ -13,20 +12,11 @@ class ChatAppBar extends ConsumerWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final authService = ref.watch(authServiceProvider);
-    final photo = authService.currentUser?.photoURL;
-
-    final ImageProvider image;
-
-    if (photo == null) {
-      image = const AssetImage('assets/camus.jpg');
-    } else {
-      image = NetworkImage(photo);
-    }
+    const ImageProvider image = AssetImage('assets/camus.jpg');
 
     return AppBar(
-      leading: Padding(
-        padding: const EdgeInsets.all(8.0),
+      leading: const Padding(
+        padding: EdgeInsets.all(8.0),
         child: CircleAvatar(
           foregroundImage: image,
         ),

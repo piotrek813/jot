@@ -1,8 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:jot_notes/login_screen.dart';
-import 'package:jot_notes/service/auth_service.dart/auth_service.dart';
 import 'package:jot_notes/ui/appbar.dart';
 import 'package:jot_notes/ui/chote/chote_tile.dart';
 import 'package:jot_notes/ui/chote/chotes_list.dart';
@@ -26,23 +24,14 @@ class MyApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isAuthenticated = ref.watch(authStateChangesProvider);
     return MaterialApp(
         title: 'Notes',
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: const Color(0x00676df4)),
           useMaterial3: true,
         ),
-        home: isAuthenticated.when(
-            data: (user) {
-              if (user != null) {
-                return const NotesChat();
-              } else {
-                return const LoginScreen();
-              }
-            },
-            error: (_, __) => const Placeholder(),
-            loading: () => const Placeholder()));
+        home: const NotesChat(),
+        );
   }
 }
 

@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:jot_notes/migrations/database.dart';
 import 'package:jot_notes/ui/appbar.dart';
 import 'package:jot_notes/ui/chote/chote_tile.dart';
 import 'package:jot_notes/ui/chote/chotes_list.dart';
@@ -16,7 +17,9 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  runApp(const ProviderScope(child: MyApp()));
+  final db = await openDB();
+
+  runApp(ProviderScope(overrides: [databaseProvider.overrideWithValue(db)],child: const MyApp(),));
 }
 
 class MyApp extends ConsumerWidget {

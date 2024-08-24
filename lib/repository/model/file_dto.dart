@@ -6,7 +6,7 @@ part 'file_dto.g.dart';
 @freezed
 class FileDto with _$FileDto {
   const factory FileDto(
-      {required String text,
+      {required String path,
       required int createdDate,
       required int choteId,
       int? id}) = _FileDto;

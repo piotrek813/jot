@@ -82,7 +82,7 @@ class ChoteTile extends ConsumerWidget {
     final chote = ref.watch(currentChoteProvider);
     return Dismissible(
       direction: DismissDirection.startToEnd,
-      key: Key("${chote.id!}"),
+      key: Key("${chote.id}"),
       confirmDismiss: (_) => Future.value(false),
       onUpdate: (details) {
         if (!details.reached) return;
@@ -93,7 +93,7 @@ class ChoteTile extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              if (chote.files != null && chote.files!.isNotEmpty)
+              if (chote.files.isNotEmpty)
                 const FractionallySizedBox(
                     widthFactor: 0.8, child: ChoteTileImages()),
               if (chote.text.isNotEmpty)

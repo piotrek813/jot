@@ -8,7 +8,7 @@ part of 'file_dto.dart';
 
 _$FileDtoImpl _$$FileDtoImplFromJson(Map<String, dynamic> json) =>
     _$FileDtoImpl(
-      text: json['text'] as String,
+      path: json['path'] as String,
       createdDate: (json['createdDate'] as num).toInt(),
       choteId: (json['choteId'] as num).toInt(),
       id: (json['id'] as num?)?.toInt(),
@@ -16,7 +16,7 @@ _$FileDtoImpl _$$FileDtoImplFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$$FileDtoImplToJson(_$FileDtoImpl instance) =>
     <String, dynamic>{
-      'text': instance.text,
+      'path': instance.path,
       'createdDate': instance.createdDate,
       'choteId': instance.choteId,
       'id': instance.id,

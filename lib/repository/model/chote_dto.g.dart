@@ -9,7 +9,7 @@ part of 'chote_dto.dart';
 _$ChoteDtoImpl _$$ChoteDtoImplFromJson(Map<String, dynamic> json) =>
     _$ChoteDtoImpl(
       text: json['text'] as String,
-      createdDate: (json['createdDate'] as num?)?.toInt(),
+      createdDate: (json['createdDate'] as num).toInt(),
       id: (json['id'] as num?)?.toInt(),
     );
 

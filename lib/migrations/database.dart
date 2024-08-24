@@ -1,6 +1,9 @@
 
 import 'package:path/path.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:sqflite/sqflite.dart';
+
+part 'database.g.dart';
 
 _onConfigure(Database db) async {
   // Add support for cascade delete
@@ -12,7 +15,7 @@ void _createTableChoteV1(Batch batch) {
   batch.execute('''CREATE TABLE Chote (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     text TEXT,
-    createdDate TEXT
+    createdDate INTEGER 
 )''');
 }
 
@@ -21,8 +24,8 @@ void _createTableFileV1(Batch batch) {
   batch.execute('''CREATE TABLE File (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     path TEXT,
-    createdDate TEXT
-    choteId INTEGER 
+    createdDate TEXT,
+    choteId INTEGER,
     FOREIGN KEY (choteId) REFERENCES Chote(id) ON DELETE CASCADE
 )''');
 }
@@ -40,3 +43,8 @@ Future<Database> openDB() async {
   return db;
 }
 
+
+@riverpod
+Database database(DatabaseRef ref) {
+  throw UnimplementedError();
+}

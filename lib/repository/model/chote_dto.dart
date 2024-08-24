@@ -7,7 +7,7 @@ part 'chote_dto.g.dart';
 class ChoteDto with _$ChoteDto {
   const factory ChoteDto(
       {required String text,
-      int? createdDate,
+      required int createdDate,
       int? id,
       }) = _ChoteDto;
 

@@ -20,7 +20,7 @@ FileDto _$FileDtoFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$FileDto {
-  String get text => throw _privateConstructorUsedError;
+  String get path => throw _privateConstructorUsedError;
   int get createdDate => throw _privateConstructorUsedError;
   int get choteId => throw _privateConstructorUsedError;
   int? get id => throw _privateConstructorUsedError;
@@ -35,7 +35,7 @@ abstract class $FileDtoCopyWith<$Res> {
   factory $FileDtoCopyWith(FileDto value, $Res Function(FileDto) then) =
       _$FileDtoCopyWithImpl<$Res, FileDto>;
   @useResult
-  $Res call({String text, int createdDate, int choteId, int? id});
+  $Res call({String path, int createdDate, int choteId, int? id});
 }
 
 /// @nodoc
@@ -51,15 +51,15 @@ class _$FileDtoCopyWithImpl<$Res, $Val extends FileDto>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? text = null,
+    Object? path = null,
     Object? createdDate = null,
     Object? choteId = null,
     Object? id = freezed,
   }) {
     return _then(_value.copyWith(
-      text: null == text
-          ? _value.text
-          : text // ignore: cast_nullable_to_non_nullable
+      path: null == path
+          ? _value.path
+          : path // ignore: cast_nullable_to_non_nullable
               as String,
       createdDate: null == createdDate
           ? _value.createdDate
@@ -84,7 +84,7 @@ abstract class _$$FileDtoImplCopyWith<$Res> implements $FileDtoCopyWith<$Res> {
       __$$FileDtoImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String text, int createdDate, int choteId, int? id});
+  $Res call({String path, int createdDate, int choteId, int? id});
 }
 
 /// @nodoc
@@ -98,15 +98,15 @@ class __$$FileDtoImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? text = null,
+    Object? path = null,
     Object? createdDate = null,
     Object? choteId = null,
     Object? id = freezed,
   }) {
     return _then(_$FileDtoImpl(
-      text: null == text
-          ? _value.text
-          : text // ignore: cast_nullable_to_non_nullable
+      path: null == path
+          ? _value.path
+          : path // ignore: cast_nullable_to_non_nullable
               as String,
       createdDate: null == createdDate
           ? _value.createdDate
@@ -128,7 +128,7 @@ class __$$FileDtoImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$FileDtoImpl implements _FileDto {
   const _$FileDtoImpl(
-      {required this.text,
+      {required this.path,
       required this.createdDate,
       required this.choteId,
       this.id});
@@ -137,7 +137,7 @@ class _$FileDtoImpl implements _FileDto {
       _$$FileDtoImplFromJson(json);
 
   @override
-  final String text;
+  final String path;
   @override
   final int createdDate;
   @override
@@ -147,7 +147,7 @@ class _$FileDtoImpl implements _FileDto {
 
   @override
   String toString() {
-    return 'FileDto(text: $text, createdDate: $createdDate, choteId: $choteId, id: $id)';
+    return 'FileDto(path: $path, createdDate: $createdDate, choteId: $choteId, id: $id)';
   }
 
   @override
@@ -155,7 +155,7 @@ class _$FileDtoImpl implements _FileDto {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$FileDtoImpl &&
-            (identical(other.text, text) || other.text == text) &&
+            (identical(other.path, path) || other.path == path) &&
             (identical(other.createdDate, createdDate) ||
                 other.createdDate == createdDate) &&
             (identical(other.choteId, choteId) || other.choteId == choteId) &&
@@ -164,7 +164,7 @@ class _$FileDtoImpl implements _FileDto {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, text, createdDate, choteId, id);
+  int get hashCode => Object.hash(runtimeType, path, createdDate, choteId, id);
 
   @JsonKey(ignore: true)
   @override
@@ -182,7 +182,7 @@ class _$FileDtoImpl implements _FileDto {
 
 abstract class _FileDto implements FileDto {
   const factory _FileDto(
-      {required final String text,
+      {required final String path,
       required final int createdDate,
       required final int choteId,
       final int? id}) = _$FileDtoImpl;
@@ -190,7 +190,7 @@ abstract class _FileDto implements FileDto {
   factory _FileDto.fromJson(Map<String, dynamic> json) = _$FileDtoImpl.fromJson;
 
   @override
-  String get text;
+  String get path;
   @override
   int get createdDate;
   @override

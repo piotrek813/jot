@@ -10,23 +10,23 @@ class ChoteTileImages extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final chote = ref.watch(currentChoteProvider);
-    if (chote.files == null || chote.files!.isEmpty) return const SizedBox();
+    if (chote.files.isEmpty) return const SizedBox();
     return GridView.count(
-        crossAxisCount: chote.files!.length == 1 ? 1 : 2,
+        crossAxisCount: chote.files.length == 1 ? 1 : 2,
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
-        children: chote.files!.take(4).indexed.map((indexed) {
+        children: chote.files.take(4).indexed.map((indexed) {
           final idx = indexed.$1;
           final el = indexed.$2;
           Widget child = Hero(
             tag: 'gallery_image-$el',
             child: Material(
-                child: chote.files!.length == 1
+                child: chote.files.length == 1
                     ? ChoteImage(el, alignment: Alignment.centerRight)
                     : ChoteImage(el, fit: BoxFit.cover)),
           );
 
-          if (idx == 3 && chote.files!.length > 4) {
+          if (idx == 3 && chote.files.length > 4) {
             child = Stack(
               fit: StackFit.expand,
               children: [
@@ -36,7 +36,7 @@ class ChoteTileImages extends ConsumerWidget {
                   child: Align(
                     alignment: Alignment.center,
                     child: Text(
-                      "+ ${chote.files!.length - 4}",
+                      "+ ${chote.files.length - 4}",
                       style: const TextStyle(
                           color: AacColors.white, fontSize: 28.0, height: 1.5),
                     ),
@@ -51,7 +51,7 @@ class ChoteTileImages extends ConsumerWidget {
                   context,
                   PageRouteBuilder(
                     pageBuilder: (_, __, ___) => ImageGallery(
-                      chote.files!,
+                      chote.files,
                       displayImage: el,
                     ),
                   )),
@@ -107,7 +107,7 @@ class _ImageGalleryState extends State<ImageGallery> {
         ),
         body: GestureDetector(
           onTap: () => setState(() {
-            visibleControls = !visibleControls;
+            visibleControls = visibleControls;
           }),
           child: Column(
             children: [

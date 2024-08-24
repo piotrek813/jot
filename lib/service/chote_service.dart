@@ -1,27 +1,35 @@
 import 'dart:async';
 
 import 'package:jot_notes/model/chote.dart';
+import 'package:jot_notes/repository/chote_repository.dart';
+import 'package:jot_notes/repository/model/chote_dto.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'chote_service.g.dart';
 
 class ChoteService {
-  ChoteService();
+  final ChoteRepository choteRepository;
+  ChoteService({required this.choteRepository});
 
-  Future<void> save(Chote chote) async {
-    if (chote.createdDate == null) {
-      chote = chote.copyWith(createdDate: DateTime.now());
-    }
-
-    // here we are checking id because when id != null files are already uploaded
-    // and since we aren't alowing for modifications we skip this step
-    if (chote.id == null) {
-      processFiles(chote.files);
-    }
+  Chote fromDto(ChoteDto dto) {
+    return Chote(
+        id: dto.id,
+        text: dto.text,
+        createdDate: DateTime.fromMillisecondsSinceEpoch(dto.createdDate));
   }
 
-  Future<void> processFiles(
-      Set<String>? files) async {
+  Future<Chote> create({required String text, Set<String>? files}) async {
+    final dto = await choteRepository
+        .save(Chote(text: text, createdDate: DateTime.now()));
+
+    return fromDto(dto);
+  }
+
+  Future<void> save(Chote chote) async {
+    choteRepository.save(chote);
+  }
+
+  Future<void> processFiles(Set<String>? files) async {
     if (files != null) {
       // final futureRemoteFiles = files.map(
       //     (e) => FileService(FirebaseStorage.instance).put(e, choteRef.id));
@@ -32,33 +40,31 @@ class ChoteService {
     }
   }
 
-  Future<void> delete(Chote chote) async {
-  }
+  Future<void> delete(Chote chote) async {}
 
   Future<void> deleteAll(List<Chote> chotes) async {
+    choteRepository.deleteAll(chotes.map((e) => e.id).nonNulls.toList());
   }
 
   Future<Chote?> getById(String id) async {
     return null;
   }
 
-  Stream<List<Chote>> watch() async* {
+  Future<List<Chote>> get(offset) async {
+    final dtos = await choteRepository.get(offset);
+    return dtos.map(fromDto).toList();
+  }
+
+  Future<List<Chote>> query(String query) async {
+    if(query.trim().isEmpty) return [];
+
+    final dtos = await choteRepository.query(query);
+    return dtos.map(fromDto).toList();
   }
 }
 
 @riverpod
 ChoteService choteService(ChoteServiceRef ref) {
-  return ChoteService();
-}
-
-@riverpod
-class Chotes extends _$Chotes {
-  @override
-  Future<List<Chote>> build() async {
-    ref
-        .watch(choteServiceProvider)
-        .watch()
-        .listen((data) => state = AsyncValue.data(data));
-    return [];
-  }
+  final choteRepository = ref.watch(choteRepositoryProvider);
+  return ChoteService(choteRepository: choteRepository);
 }

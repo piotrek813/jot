@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:jot_notes/service/chote_service.dart';
+import 'package:jot_notes/providers/chotes_provider.dart';
 import 'package:jot_notes/ui/chote/chote_tile.dart';
 
 class ChotesList extends ConsumerWidget {
@@ -22,10 +22,9 @@ class ChotesList extends ConsumerWidget {
 
           final List<Widget> children = [];
 
-          if (chote.createdDate != null &&
-              chote.createdDate?.day != nextChote?.createdDate?.day) {
+          if (chote.createdDate.day != nextChote?.createdDate.day) {
             children.add(Text(DateFormat("EEE, MMM d")
-                .format(chote.createdDate!)
+                .format(chote.createdDate)
                 .toString()));
           }
 

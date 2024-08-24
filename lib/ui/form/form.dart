@@ -3,8 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jot_notes/config/colors.dart';
-import 'package:jot_notes/model/chote.dart';
-import 'package:jot_notes/service/chote_service.dart';
+import 'package:jot_notes/providers/chotes_provider.dart';
 import 'package:jot_notes/service/file_service.dart';
 import 'package:jot_notes/ui/form/chote_additional_actions.dart';
 import 'package:jot_notes/ui/form/edit_text_field.dart';
@@ -47,7 +46,6 @@ class _ChatFormState extends ConsumerState<ChatForm> {
   final formKey = GlobalKey<FormState>();
   final choteController = RichTextController(
       onMatch: (_) {
-        print("cdscscss");
       },
       targetMatches: [
         // MatchTargetItem(
@@ -81,9 +79,7 @@ class _ChatFormState extends ConsumerState<ChatForm> {
     if (!formKey.currentState!.validate()) return;
     if (ref.read(isFormDisabledProvider).disabled) return;
 
-    final chote = Chote(
-        text: choteController.text, files: ref.read(choteFilePickerProvider));
-    ref.read(choteServiceProvider).save(chote);
+    ref.read(chotesProvider.notifier).add(text: choteController.text, files: ref.read(choteFilePickerProvider));
     ref.read(choteFilePickerProvider.notifier).clear();
     choteController.clear();
   }

@@ -21,7 +21,7 @@ ChoteDto _$ChoteDtoFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$ChoteDto {
   String get text => throw _privateConstructorUsedError;
-  int? get createdDate => throw _privateConstructorUsedError;
+  int get createdDate => throw _privateConstructorUsedError;
   int? get id => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -35,7 +35,7 @@ abstract class $ChoteDtoCopyWith<$Res> {
   factory $ChoteDtoCopyWith(ChoteDto value, $Res Function(ChoteDto) then) =
       _$ChoteDtoCopyWithImpl<$Res, ChoteDto>;
   @useResult
-  $Res call({String text, int? createdDate, int? id});
+  $Res call({String text, int createdDate, int? id});
 }
 
 /// @nodoc
@@ -52,7 +52,7 @@ class _$ChoteDtoCopyWithImpl<$Res, $Val extends ChoteDto>
   @override
   $Res call({
     Object? text = null,
-    Object? createdDate = freezed,
+    Object? createdDate = null,
     Object? id = freezed,
   }) {
     return _then(_value.copyWith(
@@ -60,10 +60,10 @@ class _$ChoteDtoCopyWithImpl<$Res, $Val extends ChoteDto>
           ? _value.text
           : text // ignore: cast_nullable_to_non_nullable
               as String,
-      createdDate: freezed == createdDate
+      createdDate: null == createdDate
           ? _value.createdDate
           : createdDate // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as int,
       id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -80,7 +80,7 @@ abstract class _$$ChoteDtoImplCopyWith<$Res>
       __$$ChoteDtoImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String text, int? createdDate, int? id});
+  $Res call({String text, int createdDate, int? id});
 }
 
 /// @nodoc
@@ -95,7 +95,7 @@ class __$$ChoteDtoImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? text = null,
-    Object? createdDate = freezed,
+    Object? createdDate = null,
     Object? id = freezed,
   }) {
     return _then(_$ChoteDtoImpl(
@@ -103,10 +103,10 @@ class __$$ChoteDtoImplCopyWithImpl<$Res>
           ? _value.text
           : text // ignore: cast_nullable_to_non_nullable
               as String,
-      createdDate: freezed == createdDate
+      createdDate: null == createdDate
           ? _value.createdDate
           : createdDate // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as int,
       id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -118,7 +118,8 @@ class __$$ChoteDtoImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$ChoteDtoImpl implements _ChoteDto {
-  const _$ChoteDtoImpl({required this.text, this.createdDate, this.id});
+  const _$ChoteDtoImpl(
+      {required this.text, required this.createdDate, this.id});
 
   factory _$ChoteDtoImpl.fromJson(Map<String, dynamic> json) =>
       _$$ChoteDtoImplFromJson(json);
@@ -126,7 +127,7 @@ class _$ChoteDtoImpl implements _ChoteDto {
   @override
   final String text;
   @override
-  final int? createdDate;
+  final int createdDate;
   @override
   final int? id;
 
@@ -167,7 +168,7 @@ class _$ChoteDtoImpl implements _ChoteDto {
 abstract class _ChoteDto implements ChoteDto {
   const factory _ChoteDto(
       {required final String text,
-      final int? createdDate,
+      required final int createdDate,
       final int? id}) = _$ChoteDtoImpl;
 
   factory _ChoteDto.fromJson(Map<String, dynamic> json) =
@@ -176,7 +177,7 @@ abstract class _ChoteDto implements ChoteDto {
   @override
   String get text;
   @override
-  int? get createdDate;
+  int get createdDate;
   @override
   int? get id;
   @override

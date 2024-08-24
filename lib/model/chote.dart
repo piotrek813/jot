@@ -8,15 +8,14 @@ class Chote with _$Chote {
   const Chote._();
   const factory Chote(
       {required String text,
-      DateTime? createdDate,
+      required DateTime createdDate,
       int? id,
-      Set<String>? files}) = _Chote;
+      @Default({}) Set<String> files}) = _Chote;
 
   factory Chote.fromJson(Map<String, Object?> json) => _$ChoteFromJson(json);
 
   String get createdTime {
-    final local = createdDate?.toLocal();
-    if (local == null) return "";
+    final local = createdDate.toLocal();
     return "${local.hour}:${local.minute}";
   }
 }

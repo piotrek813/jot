@@ -21,9 +21,9 @@ Chote _$ChoteFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$Chote {
   String get text => throw _privateConstructorUsedError;
-  DateTime? get createdDate => throw _privateConstructorUsedError;
+  DateTime get createdDate => throw _privateConstructorUsedError;
   int? get id => throw _privateConstructorUsedError;
-  Set<String>? get files => throw _privateConstructorUsedError;
+  Set<String> get files => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -35,7 +35,7 @@ abstract class $ChoteCopyWith<$Res> {
   factory $ChoteCopyWith(Chote value, $Res Function(Chote) then) =
       _$ChoteCopyWithImpl<$Res, Chote>;
   @useResult
-  $Res call({String text, DateTime? createdDate, int? id, Set<String>? files});
+  $Res call({String text, DateTime createdDate, int? id, Set<String> files});
 }
 
 /// @nodoc
@@ -52,27 +52,27 @@ class _$ChoteCopyWithImpl<$Res, $Val extends Chote>
   @override
   $Res call({
     Object? text = null,
-    Object? createdDate = freezed,
+    Object? createdDate = null,
     Object? id = freezed,
-    Object? files = freezed,
+    Object? files = null,
   }) {
     return _then(_value.copyWith(
       text: null == text
           ? _value.text
           : text // ignore: cast_nullable_to_non_nullable
               as String,
-      createdDate: freezed == createdDate
+      createdDate: null == createdDate
           ? _value.createdDate
           : createdDate // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
+              as DateTime,
       id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int?,
-      files: freezed == files
+      files: null == files
           ? _value.files
           : files // ignore: cast_nullable_to_non_nullable
-              as Set<String>?,
+              as Set<String>,
     ) as $Val);
   }
 }
@@ -84,7 +84,7 @@ abstract class _$$ChoteImplCopyWith<$Res> implements $ChoteCopyWith<$Res> {
       __$$ChoteImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String text, DateTime? createdDate, int? id, Set<String>? files});
+  $Res call({String text, DateTime createdDate, int? id, Set<String> files});
 }
 
 /// @nodoc
@@ -99,27 +99,27 @@ class __$$ChoteImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? text = null,
-    Object? createdDate = freezed,
+    Object? createdDate = null,
     Object? id = freezed,
-    Object? files = freezed,
+    Object? files = null,
   }) {
     return _then(_$ChoteImpl(
       text: null == text
           ? _value.text
           : text // ignore: cast_nullable_to_non_nullable
               as String,
-      createdDate: freezed == createdDate
+      createdDate: null == createdDate
           ? _value.createdDate
           : createdDate // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
+              as DateTime,
       id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int?,
-      files: freezed == files
+      files: null == files
           ? _value._files
           : files // ignore: cast_nullable_to_non_nullable
-              as Set<String>?,
+              as Set<String>,
     ));
   }
 }
@@ -128,7 +128,10 @@ class __$$ChoteImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$ChoteImpl extends _Chote {
   const _$ChoteImpl(
-      {required this.text, this.createdDate, this.id, final Set<String>? files})
+      {required this.text,
+      required this.createdDate,
+      this.id,
+      final Set<String> files = const {}})
       : _files = files,
         super._();
 
@@ -138,17 +141,16 @@ class _$ChoteImpl extends _Chote {
   @override
   final String text;
   @override
-  final DateTime? createdDate;
+  final DateTime createdDate;
   @override
   final int? id;
-  final Set<String>? _files;
+  final Set<String> _files;
   @override
-  Set<String>? get files {
-    final value = _files;
-    if (value == null) return null;
+  @JsonKey()
+  Set<String> get files {
     if (_files is EqualUnmodifiableSetView) return _files;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableSetView(value);
+    return EqualUnmodifiableSetView(_files);
   }
 
   @override
@@ -190,9 +192,9 @@ class _$ChoteImpl extends _Chote {
 abstract class _Chote extends Chote {
   const factory _Chote(
       {required final String text,
-      final DateTime? createdDate,
+      required final DateTime createdDate,
       final int? id,
-      final Set<String>? files}) = _$ChoteImpl;
+      final Set<String> files}) = _$ChoteImpl;
   const _Chote._() : super._();
 
   factory _Chote.fromJson(Map<String, dynamic> json) = _$ChoteImpl.fromJson;
@@ -200,11 +202,11 @@ abstract class _Chote extends Chote {
   @override
   String get text;
   @override
-  DateTime? get createdDate;
+  DateTime get createdDate;
   @override
   int? get id;
   @override
-  Set<String>? get files;
+  Set<String> get files;
   @override
   @JsonKey(ignore: true)
   _$$ChoteImplCopyWith<_$ChoteImpl> get copyWith =>

@@ -1,32 +1,31 @@
 import 'dart:io';
 
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:path/path.dart' as p;
+import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'file_service.g.dart';
 
 class FileService {
-  final FirebaseStorage storage;
+  Future<String> put(String filePath) async {
+      final fileName =     basename(filePath);
+      final imagesPath = join((await getApplicationDocumentsDirectory()).path, "images");
 
-  FileService(this.storage);
+      await Directory(imagesPath).create();
 
-  Future<String> put(String filePath, [String? path]) async {
-    final basename = p.basename(filePath);
-    final remotePath = path == null ? basename : p.join(path, basename);
+      final imagePath = join(imagesPath, fileName);
 
-    final ref = storage.ref(remotePath);
+      if (await (File(imagePath).exists())) return imagePath;
 
-    final uploadedFile = await ref.putFile(File(filePath));
-
-    return uploadedFile.ref.getDownloadURL();
+      final r= (await File(filePath).copy(imagePath)).path;
+      return r;
   }
 }
 
 @riverpod
 FileService fileService(FileServiceRef ref) =>
-    FileService(FirebaseStorage.instance);
+    FileService();
 
 @Riverpod(dependencies: [])
 class ChoteFilePicker extends _$ChoteFilePicker {

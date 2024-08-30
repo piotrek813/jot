@@ -44,21 +44,19 @@ class ChatForm extends ConsumerStatefulWidget {
 
 class _ChatFormState extends ConsumerState<ChatForm> {
   final formKey = GlobalKey<FormState>();
-  final choteController = RichTextController(
-      onMatch: (_) {
-      },
-      targetMatches: [
-        // MatchTargetItem(
-        //     allowInlineMatching: true,
-        //     style: const TextStyle(
-        //       color: Colors.blue,
-        //     ),
-        //     regex: RegExp(r'(#\S+)'))
-      ]);
-
+  late final RichTextController choteController;
   @override
   void initState() {
     super.initState();
+
+    choteController = RichTextController(onMatch: (_) {}, targetMatches: [
+      MatchTargetItem(
+          allowInlineMatching: true,
+          style: const TextStyle(
+            color: Colors.blue,
+          ),
+          regex: RegExp(r'(#\S+)'))
+    ]);
 
     choteController.addListener(() {
       ref
@@ -79,7 +77,8 @@ class _ChatFormState extends ConsumerState<ChatForm> {
     if (!formKey.currentState!.validate()) return;
     if (ref.read(isFormDisabledProvider).disabled) return;
 
-    ref.read(chotesProvider.notifier).add(text: choteController.text, files: ref.read(choteFilePickerProvider));
+    ref.read(chotesProvider.notifier).add(
+        text: choteController.text, files: ref.read(choteFilePickerProvider));
     ref.read(choteFilePickerProvider.notifier).clear();
     choteController.clear();
   }
@@ -219,6 +218,7 @@ class ChoteTextField extends StatelessWidget {
         fillColor: const Color(0xFFF4F2F2),
         filled: true,
         hintText: placeholder,
+        prefixIcon: icon,
         suffixIcon: suffixIcon,
         contentPadding:
             const EdgeInsets.symmetric(horizontal: 12, vertical: 11),

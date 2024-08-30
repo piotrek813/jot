@@ -5,6 +5,7 @@ import 'package:jot_notes/migrations/database.dart';
 import 'package:jot_notes/ui/appbar.dart';
 import 'package:jot_notes/ui/chote/chote_tile.dart';
 import 'package:jot_notes/ui/chote/chotes_list.dart';
+import 'package:jot_notes/ui/filter/filters.dart';
 import 'package:jot_notes/ui/form/chote_additional_actions.dart';
 import 'package:jot_notes/ui/form/form.dart';
 
@@ -19,7 +20,10 @@ void main() async {
 
   final db = await openDB();
 
-  runApp(ProviderScope(overrides: [databaseProvider.overrideWithValue(db)],child: const MyApp(),));
+  runApp(ProviderScope(
+    overrides: [databaseProvider.overrideWithValue(db)],
+    child: const MyApp(),
+  ));
 }
 
 class MyApp extends ConsumerWidget {
@@ -28,13 +32,13 @@ class MyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp(
-        title: 'Notes',
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: const Color(0x00676df4)),
-          useMaterial3: true,
-        ),
-        home: const NotesChat(),
-        );
+      title: 'Notes',
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0x00676df4)),
+        useMaterial3: true,
+      ),
+      home: const NotesChat(),
+    );
   }
 }
 
@@ -53,6 +57,7 @@ class NotesChat extends ConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.end,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            const Filters(),
             const Expanded(child: ChotesList()),
             Column(
               mainAxisSize: MainAxisSize.min,

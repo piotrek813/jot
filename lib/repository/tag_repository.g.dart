@@ -1,25 +1,25 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'chote_repository.dart';
+part of 'tag_repository.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$choteRepositoryHash() => r'6ca9452b6e2a63e6ade7d568496435332c3c9b2f';
+String _$tagRepositoryHash() => r'96bc21b9d6127314511d2db66febd7275d09a924';
 
-/// See also [choteRepository].
-@ProviderFor(choteRepository)
-final choteRepositoryProvider = AutoDisposeProvider<ChoteRepository>.internal(
-  choteRepository,
-  name: r'choteRepositoryProvider',
+/// See also [tagRepository].
+@ProviderFor(tagRepository)
+final tagRepositoryProvider = AutoDisposeProvider<TagRepository>.internal(
+  tagRepository,
+  name: r'tagRepositoryProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$choteRepositoryHash,
+      : _$tagRepositoryHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef ChoteRepositoryRef = AutoDisposeProviderRef<ChoteRepository>;
+typedef TagRepositoryRef = AutoDisposeProviderRef<TagRepository>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

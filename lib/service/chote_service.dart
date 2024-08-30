@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:jot_notes/model/chote.dart';
 import 'package:jot_notes/repository/chote_repository.dart';
-import 'package:jot_notes/repository/model/chote_dto.dart';
+import 'package:jot_notes/service/file_service.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'chote_service.g.dart';
@@ -11,33 +11,29 @@ class ChoteService {
   final ChoteRepository choteRepository;
   ChoteService({required this.choteRepository});
 
-  Chote fromDto(ChoteDto dto) {
-    return Chote(
-        id: dto.id,
-        text: dto.text,
-        createdDate: DateTime.fromMillisecondsSinceEpoch(dto.createdDate));
-  }
 
   Future<Chote> create({required String text, Set<String>? files}) async {
-    final dto = await choteRepository
-        .save(Chote(text: text, createdDate: DateTime.now()));
+    final savedFiles = await processFiles(files);
 
-    return fromDto(dto);
+    final chote = await choteRepository
+        .save(Chote(text: text, createdDate: DateTime.now(), files: savedFiles));
+
+    return chote;
   }
 
   Future<void> save(Chote chote) async {
     choteRepository.save(chote);
   }
 
-  Future<void> processFiles(Set<String>? files) async {
+  Future<Set<String>> processFiles(Set<String>? files) async {
     if (files != null) {
-      // final futureRemoteFiles = files.map(
-      //     (e) => FileService(FirebaseStorage.instance).put(e, choteRef.id));
-      //
-      // final remoteFiles = await Future.wait(futureRemoteFiles);
-      //
-      // await choteRef.update({"files": remoteFiles});
+      final futureMovedFiles = files.map(
+          (e) => FileService().put(e));
+
+      return (await Future.wait(futureMovedFiles)).toSet();
     }
+
+    return {};
   }
 
   Future<void> delete(Chote chote) async {}
@@ -50,16 +46,16 @@ class ChoteService {
     return null;
   }
 
-  Future<List<Chote>> get(offset) async {
-    final dtos = await choteRepository.get(offset);
-    return dtos.map(fromDto).toList();
+  Future<List<Chote>> get(int offset) async {
+    final chotes = await choteRepository.get(offset);
+    return chotes.toList();
   }
 
   Future<List<Chote>> query(String query) async {
     if(query.trim().isEmpty) return [];
 
-    final dtos = await choteRepository.query(query);
-    return dtos.map(fromDto).toList();
+    final chotes = await choteRepository.query(query);
+    return chotes.toList();
   }
 }
 

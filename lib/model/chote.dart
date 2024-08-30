@@ -16,6 +16,15 @@ class Chote with _$Chote {
 
   String get createdTime {
     final local = createdDate.toLocal();
-    return "${local.hour}:${local.minute}";
+    final minute = local.minute < 10 ? "0${local.minute}" : "${local.minute}";
+    return "${local.hour}:$minute";
+  }
+
+  Set<String> get tags {
+    return RegExp(r'(#\S+)')
+        .allMatches(text)
+        .map((e) => e[0])
+        .whereType<String>()
+        .toSet();
   }
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jot_notes/model/chote.dart';
-import 'package:jot_notes/service/chote_service.dart';
+import 'package:jot_notes/providers/chotes_provider.dart';
 import 'package:jot_notes/ui/form/form.dart';
 
 final editedChoteProvider = StateProvider<Chote?>((_) => null);
@@ -35,7 +35,7 @@ class _ChoteEditTextFieldState extends ConsumerState<ChoteEditTextField> {
         Expanded(child: ChoteTextField(controller: controller)),
         IconButton(
             onPressed: () {
-              ref.read(choteServiceProvider).save(ref
+              ref.read(chotesProvider.notifier).save(ref
                   .read(editedChoteProvider)!
                   .copyWith(text: controller.text));
 

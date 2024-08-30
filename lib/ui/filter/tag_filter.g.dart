@@ -1,25 +1,24 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'chotes_provider.dart';
+part of 'tag_filter.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$chotesHash() => r'7e3e03dea0bff0ec09585a797bb4f20ece381670';
+String _$tagsHash() => r'c55985862fbbd152bb8c5e11a322c5ea4b6037d5';
 
-/// See also [Chotes].
-@ProviderFor(Chotes)
-final chotesProvider =
-    AutoDisposeAsyncNotifierProvider<Chotes, List<Chote>>.internal(
-  Chotes.new,
-  name: r'chotesProvider',
+/// See also [tags].
+@ProviderFor(tags)
+final tagsProvider = AutoDisposeFutureProvider<Set<String>>.internal(
+  tags,
+  name: r'tagsProvider',
   debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$chotesHash,
+      const bool.fromEnvironment('dart.vm.product') ? null : _$tagsHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$Chotes = AutoDisposeAsyncNotifier<List<Chote>>;
+typedef TagsRef = AutoDisposeFutureProviderRef<Set<String>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

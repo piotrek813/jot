@@ -1,7 +1,6 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:jot_notes/migrations/database.dart';
+import 'package:jot_notes/drift/database.dart';
 import 'package:jot_notes/ui/appbar.dart';
 import 'package:jot_notes/ui/chote/chote_tile.dart';
 import 'package:jot_notes/ui/chote/chotes_list.dart';
@@ -9,19 +8,13 @@ import 'package:jot_notes/ui/filter/filters.dart';
 import 'package:jot_notes/ui/form/chote_additional_actions.dart';
 import 'package:jot_notes/ui/form/form.dart';
 
-import 'config/firebase_options.dart';
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-
-  final db = await openDB();
+  final drift = AppDatabase();
 
   runApp(ProviderScope(
-    overrides: [databaseProvider.overrideWithValue(db)],
+    overrides: [driftProvider.overrideWithValue(drift)],
     child: const MyApp(),
   ));
 }
@@ -51,7 +44,7 @@ class NotesChat extends ConsumerWidget {
       appBar: ref.watch(areChotesSelectedProvider)
           ? const SelectOptionsdAppBar()
           : const ChatAppBar(),
-      body: Padding(
+      body:  Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,

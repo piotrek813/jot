@@ -1,25 +1,29 @@
-import 'package:jot_notes/migrations/database.dart';
+import 'package:drift/drift.dart';
+import 'package:jot_notes/drift/daos/chote_dao.dart';
+import 'package:jot_notes/drift/database.dart';
 import 'package:jot_notes/model/chote.dart';
 import 'package:jot_notes/repository/file_repository.dart';
 import 'package:jot_notes/repository/model/chote_dto.dart';
 import 'package:jot_notes/repository/model/file_dto.dart';
 import 'package:jot_notes/repository/tag_repository.dart';
-import 'package:jot_notes/repository/utils.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:sqflite/sqflite.dart';
 
 part 'chote_repository.g.dart';
 
 class ChoteRepository {
-  Database db;
+  AppDatabase db;
   FileRepository fileRepository;
   TagRepository tagRepository;
+  ChoteDao choteDao;
+
+  static const offset = 50;
   static const tableName = "Chote";
 
   ChoteRepository(
       {required this.db,
       required this.fileRepository,
-      required this.tagRepository});
+      required this.tagRepository})
+      : choteDao = ChoteDao(db);
 
   Chote fromDto(ChoteDto dto, [Set<FileDto> fileDtos = const {}]) {
     return Chote(
@@ -30,56 +34,39 @@ class ChoteRepository {
   }
 
   Future<Chote> save(Chote chote) async {
-    final choteDto = ChoteDto(
-        id: chote.id,
-        text: chote.text,
-        createdDate: chote.createdDate.millisecondsSinceEpoch);
+    final id = await choteDao.save(chote);
 
-    final id = await db.insert(tableName, choteDto.toJson(),
-        conflictAlgorithm: ConflictAlgorithm.replace);
+    // final files = await fileRepository.saveAll(chote.files, id);
 
-    final files = await fileRepository.saveAll(chote.files, id);
-    tagRepository.saveAll(chote.tags, id);
-
-    return fromDto(choteDto.copyWith(id: id), files);
+    return chote.copyWith(id: id);
   }
 
   Future<void> delete(int id) async {
-    db.delete(tableName, where: 'id = ?', whereArgs: [id]);
+    db.managers.choteItems.filter((f) => f.id(id)).delete();
   }
 
   Future<void> deleteAll(List<int> ids) async {
-    await db.delete(tableName,
-        where: 'id IN (${getQuestionMarks(ids)})', whereArgs: ids);
+    db.managers.choteItems.filter((f) => f.id.isIn(ids)).delete();
   }
 
-  Future<List<Chote>> get(int offset) async {
-    final res = await db.query(tableName,
-        orderBy: "createdDate DESC", limit: 50, offset: offset);
-
-    final r = Future.wait(res
-        .map(ChoteDto.fromJson)
-        .map(
-            (e) async => fromDto(e, (await fileRepository.getByChoteId(e.id!))))
-        .toList());
-
-    return r;
+  Stream<List<Chote>> watch({List<String> tags = const []}) async* {
+    yield* choteDao.watch(tags: tags);
   }
 
   Future<List<Chote>> query(String query) async {
-    final res = await db.query(tableName,
-        where: "text LIKE ?",
-        whereArgs: ["%$query%"],
-        orderBy: "createdDate DESC",
-        limit: 50);
+    final res = await db.managers.choteItems
+        .filter((f) => f.content.contains(query))
+        .get();
 
-    return res.map(ChoteDto.fromJson).map(fromDto).toList();
+    return res
+        .map((e) => Chote(text: e.content, createdDate: e.createdAt, id: e.id))
+        .toList();
   }
 }
 
 @riverpod
 ChoteRepository choteRepository(ChoteRepositoryRef ref) {
-  final db = ref.watch(databaseProvider);
+  final db = ref.watch(driftProvider);
   final fileRepository = ref.watch(fileRepositoryProvider);
   final tagRepository = ref.watch(tagRepositoryProvider);
 

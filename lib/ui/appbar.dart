@@ -1,6 +1,8 @@
+import 'package:drift_db_viewer/drift_db_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:jot_notes/providers/chotes_provider.dart';
+import 'package:jot_notes/drift/database.dart';
+import 'package:jot_notes/service/chote_service.dart';
 import 'package:jot_notes/ui/chote/chote_tile.dart';
 import 'package:jot_notes/ui/form/edit_text_field.dart';
 import 'package:jot_notes/ui/search/search_screen.dart';
@@ -24,6 +26,12 @@ class ChatAppBar extends ConsumerWidget implements PreferredSizeWidget {
       ),
       title: const Text("Moje notatki"),
       actions: [
+        IconButton(
+            onPressed: () {
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => DriftDbViewer(ref.read(driftProvider))));
+            },
+            icon: const Icon(Icons.dataset)),
         IconButton(
             onPressed: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
@@ -65,7 +73,7 @@ class SelectOptionsdAppBar extends ConsumerWidget
         IconButton(
             tooltip: "Usuń",
             onPressed: () {
-              ref.read(chotesProvider.notifier).deleteAll(selectedChotes);
+              ref.read(choteServiceProvider).deleteAll(selectedChotes);
               ref.read(selectedChotesProvider.notifier).clear();
             },
             icon: const Icon(Icons.delete))

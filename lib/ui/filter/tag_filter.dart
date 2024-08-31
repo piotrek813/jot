@@ -8,13 +8,13 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'tag_filter.g.dart';
 
 @riverpod
-Future<Set<String>> tags(TagsRef ref) {
+Stream<List<String>> tags(TagsRef ref) {
   final tagRepository = ref.watch(tagRepositoryProvider);
 
-  return tagRepository.getAll();
+  return tagRepository.watch();
 }
 
-final selectedTags = StateProvider.autoDispose((ref) {
+final selectedTags = StateProvider<List<String>>((ref) {
   return [];
 });
 
@@ -38,10 +38,7 @@ class _TagFilterState extends ConsumerState<TagFilter> {
 
   @override
   Widget build(BuildContext context) {
-    final tags = ref.watch(tagsProvider).valueOrNull;
-
-    final items =
-        tags?.toList().where((e) => e.contains(controller.text)).toList();
+    final items = ref.watch(tagsProvider).valueOrNull;
 
     return ActionChip(
         avatar: const Icon(Icons.label),
@@ -68,7 +65,7 @@ class _TagFilterState extends ConsumerState<TagFilter> {
                             TextAction(
                               child: const Text("Git"),
                               onTap: () {
-                                ref.read(selectedTags.notifier).state = selected;
+                                ref.read(selectedTags.notifier).state = [...selected];
                                 Navigator.pop(context);
                               },
                             ),

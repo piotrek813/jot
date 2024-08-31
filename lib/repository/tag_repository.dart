@@ -1,12 +1,11 @@
-import 'package:jot_notes/migrations/database.dart';
+import 'package:jot_notes/drift/database.dart';
 import 'package:jot_notes/repository/model/tag_dto.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:sqflite/sqflite.dart';
 
 part 'tag_repository.g.dart';
 
 class TagRepository {
-  Database db;
+  AppDatabase db;
   static const tableName = "Tag";
   static const tableChoteTag = "ChoteTag";
 
@@ -16,41 +15,16 @@ class TagRepository {
     return dto.name;
   }
 
-  Future<Set<String>> saveAll(Set<String> tags, int choteId) async {
-    final tagDtos = tags.map((e) => TagDto(
-          name: e,
-          createdDate: DateTime.now().millisecondsSinceEpoch,
-        ));
-
-
-    final savedDtos = await db.transaction((txn) async {
-      return Future.wait(tagDtos.map((dto) async {
-        final id = await txn.insert(tableName, dto.toJson(),
-           conflictAlgorithm: ConflictAlgorithm.ignore);
-
-        txn.insert(tableChoteTag, {
-          "choteId": choteId,
-          "tagId": id
-        });
-  
-        return dto = dto.copyWith(id: id);
-      }));
-    });
-  
-
-    return savedDtos.map(fromDto).toSet();
-  }
-
-  Future<Set<String>> getAll() async {
-    final res = await db.query(tableName);
-
-    return res.map(TagDto.fromJson).map(fromDto).toSet();
+  Stream<List<String>> watch() async* {
+    yield* db.managers.tagItems
+        .watch()
+        .map((items) => items.map((e) => e.name).toList());
   }
 }
 
 @riverpod
 TagRepository tagRepository(TagRepositoryRef ref) {
-  final db = ref.watch(databaseProvider);
+  final db = ref.watch(driftProvider);
 
   return TagRepository(db: db);
 }

@@ -46,9 +46,8 @@ class ChoteService {
     return null;
   }
 
-  Future<List<Chote>> get(int offset) async {
-    final chotes = await choteRepository.get(offset);
-    return chotes.toList();
+  Stream<List<Chote>> watch({List<String> tags = const []}) async* {
+    yield* choteRepository.watch(tags: tags);
   }
 
   Future<List<Chote>> query(String query) async {

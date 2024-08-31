@@ -10,26 +10,21 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.6
-  firebase_core: ^3.1.1
-  cloud_firestore: ^5.0.2
   flutter_riverpod: ^2.5.1
   riverpod_annotation: ^2.3.5
   freezed: ^2.5.2
   freezed_annotation: ^2.4.1
   json_annotation: ^4.9.0
   intl: ^0.19.0
-  firebase_storage: ^12.1.0
   path: ^1.9.0
   image_picker: ^1.1.2
   rich_text_controller: ^2.0.1
   shared_preferences: ^2.2.3
-  firebase_auth: ^5.1.4
-  google_sign_in: ^6.2.1
-  firebase_ui_auth: ^1.15.0
-  sign_in_button: ^3.0.0
-  firebase_cached_image: ^0.6.1
-  sqflite: ^2.3.3+1
   path_provider: ^2.1.4
+  sqflite: ^2.3.3+1
+  drift: ^2.20.0
+  drift_flutter: ^0.2.0
+  drift_db_viewer: ^2.1.0
 
 
 dev_dependencies:
@@ -42,6 +37,7 @@ dev_dependencies:
   riverpod_lint: ^2.3.10
   json_serializable: ^6.8.0
   pigeon: ^21.0.0
+  drift_dev: ^2.20.1
 
 flutter:
   uses-material-design: true

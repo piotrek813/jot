@@ -3,6 +3,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:jot_notes/providers/chotes_provider.dart';
 import 'package:jot_notes/ui/chote/chote_tile.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+part 'chotes_list.g.dart';
+
+@riverpod
+int page(PageRef ref) {
+  return 0;
+}
 
 class ChotesList extends ConsumerStatefulWidget {
   const ChotesList({super.key});
@@ -12,36 +20,13 @@ class ChotesList extends ConsumerStatefulWidget {
 }
 
 class _ChotesListState extends ConsumerState<ChotesList> {
-  final _scrollController = ScrollController();
-
-  @override
-  void initState() {
-    super.initState();
-    _scrollController.addListener(() {
-      final maxScroll = _scrollController.position.maxScrollExtent;
-      final currentScroll = _scrollController.position.pixels;
-
-      if (currentScroll == maxScroll) {
-        ref.read(chotesProvider.notifier).loadPrevious();
-      }
-    });
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-
-    _scrollController.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
-    final chotes = ref.watch(chotesProvider).valueOrNull;
+    final chotes = ref.watch(chotesListProvider).valueOrNull;
 
     if (chotes == null) return const SizedBox();
 
     return ListView.builder(
-        controller: _scrollController,
         reverse: true,
         itemCount: chotes.length,
         itemBuilder: (context, index) {

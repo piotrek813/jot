@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart';
 import 'package:drift_flutter/drift_flutter.dart';
+import 'package:jot_notes/drift/converters/list_converter.dart';
 import 'package:jot_notes/drift/daos/chote_dao.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -9,6 +10,7 @@ class ChoteItems extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get content => text()();
   DateTimeColumn get createdAt => dateTime()();
+  TextColumn get files => text().map(const DatabaseSetConverter())();
 }
 
 class ChoteTag extends Table {
@@ -32,7 +34,6 @@ class AppDatabase extends _$AppDatabase {
   static QueryExecutor _openConnection() {
     return driftDatabase(name: 'main');
   }
-
 }
 
 @riverpod

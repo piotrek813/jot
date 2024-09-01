@@ -7,9 +7,7 @@ part 'chotes_provider.g.dart';
 
 @riverpod
 Stream<List<Chote>> chotesList(ChotesListRef ref) {
-  final tags = ref.watch(selectedTags);
-  print("choteList");
-  print(tags);
+  final tags = ref.watch(selectedTagsProvider);
   return  ref.watch(choteServiceProvider).watch(tags: tags);
 }
 

@@ -18,7 +18,7 @@ class FileService {
 
       if (await (File(imagePath).exists())) return imagePath;
 
-      final r= (await File(filePath).copy(imagePath)).path;
+      final r = (await File(filePath).copy(imagePath)).path;
       return r;
   }
 }

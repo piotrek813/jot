@@ -34,40 +34,30 @@ class ChoteAdditionalActions extends ConsumerWidget {
 
     if (!showAdditionalActions) return const SizedBox();
 
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        Column(
-          children: [
-            IconButton(
-                onPressed:
-                    ref.read(choteFilePickerProvider.notifier).pickMultiImages,
-                icon: const Icon(Icons.browse_gallery_rounded)),
-            const Text("Galeria")
-          ],
-        ),
-        Column(
-          children: [
-            IconButton(
-                onPressed: () {}, icon: const Icon(Icons.file_open_rounded)),
-            const Text("Plik")
-          ],
-        ),
-        Column(
-          children: [
-            IconButton(
-                onPressed: () {},
-                icon: const Icon(Icons.notifications_rounded)),
-            const Text("Przypominajka")
-          ],
-        ),
-        Column(
-          children: [
-            IconButton(onPressed: () {}, icon: const Icon(Icons.label_rounded)),
-            const Text("Etykiety")
-          ],
-        ),
-      ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Column(
+            children: [
+              IconButton(
+                  onPressed:
+                      ref.read(choteFilePickerProvider.notifier).pickMultiImages,
+                  icon: const Icon(Icons.photo)),
+              const Text("Galeria")
+            ],
+          ),
+          Column(
+            children: [
+              IconButton(
+                  onPressed: () {},
+                  icon: const Icon(Icons.notifications_rounded)),
+              const Text("Przypominajka")
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

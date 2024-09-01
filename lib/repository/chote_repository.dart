@@ -2,9 +2,6 @@ import 'package:drift/drift.dart';
 import 'package:jot_notes/drift/daos/chote_dao.dart';
 import 'package:jot_notes/drift/database.dart';
 import 'package:jot_notes/model/chote.dart';
-import 'package:jot_notes/repository/file_repository.dart';
-import 'package:jot_notes/repository/model/chote_dto.dart';
-import 'package:jot_notes/repository/model/file_dto.dart';
 import 'package:jot_notes/repository/tag_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -12,7 +9,6 @@ part 'chote_repository.g.dart';
 
 class ChoteRepository {
   AppDatabase db;
-  FileRepository fileRepository;
   TagRepository tagRepository;
   ChoteDao choteDao;
 
@@ -21,22 +17,12 @@ class ChoteRepository {
 
   ChoteRepository(
       {required this.db,
-      required this.fileRepository,
+      
       required this.tagRepository})
       : choteDao = ChoteDao(db);
 
-  Chote fromDto(ChoteDto dto, [Set<FileDto> fileDtos = const {}]) {
-    return Chote(
-        id: dto.id,
-        text: dto.text,
-        files: fileDtos.map((e) => e.path).toSet(),
-        createdDate: DateTime.fromMillisecondsSinceEpoch(dto.createdDate));
-  }
-
   Future<Chote> save(Chote chote) async {
     final id = await choteDao.save(chote);
-
-    // final files = await fileRepository.saveAll(chote.files, id);
 
     return chote.copyWith(id: id);
   }
@@ -67,9 +53,8 @@ class ChoteRepository {
 @riverpod
 ChoteRepository choteRepository(ChoteRepositoryRef ref) {
   final db = ref.watch(driftProvider);
-  final fileRepository = ref.watch(fileRepositoryProvider);
   final tagRepository = ref.watch(tagRepositoryProvider);
 
   return ChoteRepository(
-      db: db, fileRepository: fileRepository, tagRepository: tagRepository);
+      db: db, tagRepository: tagRepository);
 }

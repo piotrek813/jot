@@ -14,7 +14,7 @@ Stream<List<String>> tags(TagsRef ref) {
   return tagRepository.watch();
 }
 
-final selectedTags = StateProvider<List<String>>((ref) {
+final selectedTagsProvider = StateProvider<List<String>>((ref) {
   return [];
 });
 
@@ -38,34 +38,54 @@ class _TagFilterState extends ConsumerState<TagFilter> {
 
   @override
   Widget build(BuildContext context) {
-    final items = ref.watch(tagsProvider).valueOrNull;
+    final tags = ref.watch(tagsProvider).valueOrNull;
+
+    if (tags == null) return const SizedBox();
+
+    final List<String> items;
+
+    if (controller.text.trim().isNotEmpty) {
+      items = tags.where((e) => e.contains(controller.text)).toList();
+    } else {
+      items = tags;
+    }
+
+    final textTheme = Theme.of(context).textTheme;
+
+    final selectedTags = ref.watch(selectedTagsProvider);
+
+    String selectedText = selectedTags.join(", ");
+    if (selectedTags.length > 8) {
+      selectedText = "${selectedText.substring(0, 8)}...";
+    } else if (selectedText.isNotEmpty) {
+      selectedText = "$selectedText...";
+    }
 
     return ActionChip(
         avatar: const Icon(Icons.label),
-        label: const Text("Tagi"),
-        onPressed: items == null
-            ? null
-            : () => showModalBottomSheet(
-                context: context,
-                backgroundColor: AacColors.white,
-                builder: (context) {
-                  return Padding(
+        label: Text("Tagi $selectedText"),
+        onPressed: () async {
+          await showModalBottomSheet<List<String>?>(
+              context: context,
+              backgroundColor: AacColors.white,
+              builder: (context) => Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Column(
                       children: [
                         Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             TextAction(
-                              child: const Text("Anuluj"),
+                              child:
+                                  Text("Anuluj", style: textTheme.titleMedium),
                               onTap: () {
                                 Navigator.pop(context);
                               },
                             ),
                             TextAction(
-                              child: const Text("Git"),
+                              child: Text("Git", style: textTheme.titleMedium),
                               onTap: () {
-                                ref.read(selectedTags.notifier).state = [...selected];
+                                ref.read(selectedTagsProvider.notifier).state = [...selected];
                                 Navigator.pop(context);
                               },
                             ),
@@ -102,10 +122,12 @@ class _TagFilterState extends ConsumerState<TagFilter> {
                         }))
                       ],
                     ),
-                  );
-                }));
+                  ));
+        });
   }
 }
+
+
 
 class TextAction extends StatelessWidget {
   const TextAction({super.key, this.onTap, this.child});

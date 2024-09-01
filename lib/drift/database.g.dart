@@ -30,8 +30,14 @@ class $ChoteItemsTable extends ChoteItems
   late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
       'created_at', aliasedName, false,
       type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  static const VerificationMeta _filesMeta = const VerificationMeta('files');
   @override
-  List<GeneratedColumn> get $columns => [id, content, createdAt];
+  late final GeneratedColumnWithTypeConverter<Set<String>, String> files =
+      GeneratedColumn<String>('files', aliasedName, false,
+              type: DriftSqlType.string, requiredDuringInsert: true)
+          .withConverter<Set<String>>($ChoteItemsTable.$converterfiles);
+  @override
+  List<GeneratedColumn> get $columns => [id, content, createdAt, files];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -57,6 +63,7 @@ class $ChoteItemsTable extends ChoteItems
     } else if (isInserting) {
       context.missing(_createdAtMeta);
     }
+    context.handle(_filesMeta, const VerificationResult.success());
     return context;
   }
 
@@ -72,6 +79,9 @@ class $ChoteItemsTable extends ChoteItems
           .read(DriftSqlType.string, data['${effectivePrefix}content'])!,
       createdAt: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
+      files: $ChoteItemsTable.$converterfiles.fromSql(attachedDatabase
+          .typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}files'])!),
     );
   }
 
@@ -79,20 +89,31 @@ class $ChoteItemsTable extends ChoteItems
   $ChoteItemsTable createAlias(String alias) {
     return $ChoteItemsTable(attachedDatabase, alias);
   }
+
+  static TypeConverter<Set<String>, String> $converterfiles =
+      const DatabaseSetConverter();
 }
 
 class ChoteItem extends DataClass implements Insertable<ChoteItem> {
   final int id;
   final String content;
   final DateTime createdAt;
+  final Set<String> files;
   const ChoteItem(
-      {required this.id, required this.content, required this.createdAt});
+      {required this.id,
+      required this.content,
+      required this.createdAt,
+      required this.files});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
     map['content'] = Variable<String>(content);
     map['created_at'] = Variable<DateTime>(createdAt);
+    {
+      map['files'] =
+          Variable<String>($ChoteItemsTable.$converterfiles.toSql(files));
+    }
     return map;
   }
 
@@ -101,6 +122,7 @@ class ChoteItem extends DataClass implements Insertable<ChoteItem> {
       id: Value(id),
       content: Value(content),
       createdAt: Value(createdAt),
+      files: Value(files),
     );
   }
 
@@ -111,6 +133,7 @@ class ChoteItem extends DataClass implements Insertable<ChoteItem> {
       id: serializer.fromJson<int>(json['id']),
       content: serializer.fromJson<String>(json['content']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+      files: serializer.fromJson<Set<String>>(json['files']),
     );
   }
   @override
@@ -120,20 +143,27 @@ class ChoteItem extends DataClass implements Insertable<ChoteItem> {
       'id': serializer.toJson<int>(id),
       'content': serializer.toJson<String>(content),
       'createdAt': serializer.toJson<DateTime>(createdAt),
+      'files': serializer.toJson<Set<String>>(files),
     };
   }
 
-  ChoteItem copyWith({int? id, String? content, DateTime? createdAt}) =>
+  ChoteItem copyWith(
+          {int? id,
+          String? content,
+          DateTime? createdAt,
+          Set<String>? files}) =>
       ChoteItem(
         id: id ?? this.id,
         content: content ?? this.content,
         createdAt: createdAt ?? this.createdAt,
+        files: files ?? this.files,
       );
   ChoteItem copyWithCompanion(ChoteItemsCompanion data) {
     return ChoteItem(
       id: data.id.present ? data.id.value : this.id,
       content: data.content.present ? data.content.value : this.content,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      files: data.files.present ? data.files.value : this.files,
     );
   }
 
@@ -142,55 +172,67 @@ class ChoteItem extends DataClass implements Insertable<ChoteItem> {
     return (StringBuffer('ChoteItem(')
           ..write('id: $id, ')
           ..write('content: $content, ')
-          ..write('createdAt: $createdAt')
+          ..write('createdAt: $createdAt, ')
+          ..write('files: $files')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, content, createdAt);
+  int get hashCode => Object.hash(id, content, createdAt, files);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is ChoteItem &&
           other.id == this.id &&
           other.content == this.content &&
-          other.createdAt == this.createdAt);
+          other.createdAt == this.createdAt &&
+          other.files == this.files);
 }
 
 class ChoteItemsCompanion extends UpdateCompanion<ChoteItem> {
   final Value<int> id;
   final Value<String> content;
   final Value<DateTime> createdAt;
+  final Value<Set<String>> files;
   const ChoteItemsCompanion({
     this.id = const Value.absent(),
     this.content = const Value.absent(),
     this.createdAt = const Value.absent(),
+    this.files = const Value.absent(),
   });
   ChoteItemsCompanion.insert({
     this.id = const Value.absent(),
     required String content,
     required DateTime createdAt,
+    required Set<String> files,
   })  : content = Value(content),
-        createdAt = Value(createdAt);
+        createdAt = Value(createdAt),
+        files = Value(files);
   static Insertable<ChoteItem> custom({
     Expression<int>? id,
     Expression<String>? content,
     Expression<DateTime>? createdAt,
+    Expression<String>? files,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (content != null) 'content': content,
       if (createdAt != null) 'created_at': createdAt,
+      if (files != null) 'files': files,
     });
   }
 
   ChoteItemsCompanion copyWith(
-      {Value<int>? id, Value<String>? content, Value<DateTime>? createdAt}) {
+      {Value<int>? id,
+      Value<String>? content,
+      Value<DateTime>? createdAt,
+      Value<Set<String>>? files}) {
     return ChoteItemsCompanion(
       id: id ?? this.id,
       content: content ?? this.content,
       createdAt: createdAt ?? this.createdAt,
+      files: files ?? this.files,
     );
   }
 
@@ -206,6 +248,10 @@ class ChoteItemsCompanion extends UpdateCompanion<ChoteItem> {
     if (createdAt.present) {
       map['created_at'] = Variable<DateTime>(createdAt.value);
     }
+    if (files.present) {
+      map['files'] =
+          Variable<String>($ChoteItemsTable.$converterfiles.toSql(files.value));
+    }
     return map;
   }
 
@@ -214,7 +260,8 @@ class ChoteItemsCompanion extends UpdateCompanion<ChoteItem> {
     return (StringBuffer('ChoteItemsCompanion(')
           ..write('id: $id, ')
           ..write('content: $content, ')
-          ..write('createdAt: $createdAt')
+          ..write('createdAt: $createdAt, ')
+          ..write('files: $files')
           ..write(')'))
         .toString();
   }
@@ -651,11 +698,13 @@ typedef $$ChoteItemsTableCreateCompanionBuilder = ChoteItemsCompanion Function({
   Value<int> id,
   required String content,
   required DateTime createdAt,
+  required Set<String> files,
 });
 typedef $$ChoteItemsTableUpdateCompanionBuilder = ChoteItemsCompanion Function({
   Value<int> id,
   Value<String> content,
   Value<DateTime> createdAt,
+  Value<Set<String>> files,
 });
 
 final class $$ChoteItemsTableReferences
@@ -696,6 +745,13 @@ class $$ChoteItemsTableFilterComposer
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
 
+  ColumnWithTypeConverterFilters<Set<String>, Set<String>, String> get files =>
+      $state.composableBuilder(
+          column: $state.table.files,
+          builder: (column, joinBuilders) => ColumnWithTypeConverterFilters(
+              column,
+              joinBuilders: joinBuilders));
+
   ComposableFilter choteTagRefs(
       ComposableFilter Function($$ChoteTagTableFilterComposer f) f) {
     final $$ChoteTagTableFilterComposer composer = $state.composerBuilder(
@@ -727,6 +783,11 @@ class $$ChoteItemsTableOrderingComposer
       column: $state.table.createdAt,
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get files => $state.composableBuilder(
+      column: $state.table.files,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
 }
 
 class $$ChoteItemsTableTableManager extends RootTableManager<
@@ -752,21 +813,25 @@ class $$ChoteItemsTableTableManager extends RootTableManager<
             Value<int> id = const Value.absent(),
             Value<String> content = const Value.absent(),
             Value<DateTime> createdAt = const Value.absent(),
+            Value<Set<String>> files = const Value.absent(),
           }) =>
               ChoteItemsCompanion(
             id: id,
             content: content,
             createdAt: createdAt,
+            files: files,
           ),
           createCompanionCallback: ({
             Value<int> id = const Value.absent(),
             required String content,
             required DateTime createdAt,
+            required Set<String> files,
           }) =>
               ChoteItemsCompanion.insert(
             id: id,
             content: content,
             createdAt: createdAt,
+            files: files,
           ),
           withReferenceMapper: (p0) => p0
               .map((e) => (

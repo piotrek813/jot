@@ -105,6 +105,7 @@ class _ChatFormState extends ConsumerState<ChatForm> {
                   ref.read(showAdditionalActionsProvider.notifier).hide(),
               controller: choteController,
             )),
+            const SizedBox(width: 8.0,),
             ChoteActionButton(submit: submit, disabled: isFormDisabled),
           ],
         ));

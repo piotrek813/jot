@@ -1,5 +1,4 @@
 import 'package:jot_notes/drift/database.dart';
-import 'package:jot_notes/repository/model/tag_dto.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'tag_repository.g.dart';
@@ -10,10 +9,6 @@ class TagRepository {
   static const tableChoteTag = "ChoteTag";
 
   TagRepository({required this.db});
-
-  String fromDto(TagDto dto) {
-    return dto.name;
-  }
 
   Stream<List<String>> watch() async* {
     yield* db.managers.tagItems

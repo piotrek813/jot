@@ -15,7 +15,7 @@ class ChatAppBar extends ConsumerWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    const ImageProvider image = AssetImage('assets/camus.jpg');
+    const ImageProvider image = AssetImage('assets/icon/icon.png');
 
     return AppBar(
       leading: const Padding(

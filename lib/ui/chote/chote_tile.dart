@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_link_previewer/flutter_link_previewer.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jot_notes/model/chote.dart';
 import 'package:jot_notes/ui/chote/chote_tile_images.dart';
@@ -77,12 +78,19 @@ class ChoteGestureDetector extends ConsumerWidget {
 class ChoteTile extends ConsumerWidget {
   const ChoteTile({super.key});
 
+  String? getLink(String input) {
+    return RegExp(regexLink).firstMatch(input)?[0];
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final chote = ref.watch(currentChoteProvider);
+
+    final link = getLink(chote.text);
+
     return Dismissible(
       direction: DismissDirection.startToEnd,
-      key: Key(chote.id!),
+      key: Key("${chote.id}"),
       confirmDismiss: (_) => Future.value(false),
       onUpdate: (details) {
         if (!details.reached) return;
@@ -93,7 +101,8 @@ class ChoteTile extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              if (chote.files != null && chote.files!.isNotEmpty)
+              if (link != null)  ChoteLinkPreview(link: link),
+              if (chote.files.isNotEmpty)
                 const FractionallySizedBox(
                     widthFactor: 0.8, child: ChoteTileImages()),
               if (chote.text.isNotEmpty)
@@ -107,6 +116,30 @@ class ChoteTile extends ConsumerWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class ChoteLinkPreview extends StatefulWidget {
+final  String link;
+  const ChoteLinkPreview({super.key, required this.link});
+
+  @override
+  State<ChoteLinkPreview> createState() => _ChoteLinkPreviewState();
+}
+
+class _ChoteLinkPreviewState extends State<ChoteLinkPreview> {
+  dynamic previewData;
+
+  @override
+  Widget build(BuildContext context) {
+    return LinkPreview(
+      onPreviewDataFetched: (data) {
+        previewData = data;
+      },
+      previewData: previewData,
+      text: widget.link,
+      width: MediaQuery.of(context).size.width,
     );
   }
 }

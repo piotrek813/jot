@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jot_notes/config/colors.dart';
-import 'package:jot_notes/model/chote.dart';
 import 'package:jot_notes/service/chote_service.dart';
 import 'package:jot_notes/service/file_service.dart';
 import 'package:jot_notes/ui/form/chote_additional_actions.dart';
@@ -45,22 +44,19 @@ class ChatForm extends ConsumerStatefulWidget {
 
 class _ChatFormState extends ConsumerState<ChatForm> {
   final formKey = GlobalKey<FormState>();
-  final choteController = RichTextController(
-      onMatch: (_) {
-        print("cdscscss");
-      },
-      targetMatches: [
-        // MatchTargetItem(
-        //     allowInlineMatching: true,
-        //     style: const TextStyle(
-        //       color: Colors.blue,
-        //     ),
-        //     regex: RegExp(r'(#\S+)'))
-      ]);
-
+  late final RichTextController choteController;
   @override
   void initState() {
     super.initState();
+
+    choteController = RichTextController(onMatch: (_) {}, targetMatches: [
+      MatchTargetItem(
+          allowInlineMatching: true,
+          style: const TextStyle(
+            color: Colors.blue,
+          ),
+          regex: RegExp(r'(#\S+)'))
+    ]);
 
     choteController.addListener(() {
       ref
@@ -81,9 +77,8 @@ class _ChatFormState extends ConsumerState<ChatForm> {
     if (!formKey.currentState!.validate()) return;
     if (ref.read(isFormDisabledProvider).disabled) return;
 
-    final chote = Chote(
+    ref.read(choteServiceProvider).create(
         text: choteController.text, files: ref.read(choteFilePickerProvider));
-    ref.read(choteServiceProvider).save(chote);
     ref.read(choteFilePickerProvider.notifier).clear();
     choteController.clear();
   }
@@ -110,6 +105,7 @@ class _ChatFormState extends ConsumerState<ChatForm> {
                   ref.read(showAdditionalActionsProvider.notifier).hide(),
               controller: choteController,
             )),
+            const SizedBox(width: 8.0,),
             ChoteActionButton(submit: submit, disabled: isFormDisabled),
           ],
         ));
@@ -223,6 +219,7 @@ class ChoteTextField extends StatelessWidget {
         fillColor: const Color(0xFFF4F2F2),
         filled: true,
         hintText: placeholder,
+        prefixIcon: icon,
         suffixIcon: suffixIcon,
         contentPadding:
             const EdgeInsets.symmetric(horizontal: 12, vertical: 11),

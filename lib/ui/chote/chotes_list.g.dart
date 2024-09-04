@@ -1,24 +1,24 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'chote_service.dart';
+part of 'chotes_list.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$choteServiceHash() => r'e99c437009b6425abf46b22ce984ad4379541dd4';
+String _$pageHash() => r'c123045b2f483d1a552bb7db562f3f2e50620a1d';
 
-/// See also [choteService].
-@ProviderFor(choteService)
-final choteServiceProvider = AutoDisposeProvider<ChoteService>.internal(
-  choteService,
-  name: r'choteServiceProvider',
+/// See also [page].
+@ProviderFor(page)
+final pageProvider = AutoDisposeProvider<int>.internal(
+  page,
+  name: r'pageProvider',
   debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$choteServiceHash,
+      const bool.fromEnvironment('dart.vm.product') ? null : _$pageHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef ChoteServiceRef = AutoDisposeProviderRef<ChoteService>;
+typedef PageRef = AutoDisposeProviderRef<int>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

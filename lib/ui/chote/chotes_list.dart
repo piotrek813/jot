@@ -1,15 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:jot_notes/service/chote_service.dart';
+import 'package:jot_notes/providers/chotes_provider.dart';
 import 'package:jot_notes/ui/chote/chote_tile.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-class ChotesList extends ConsumerWidget {
+part 'chotes_list.g.dart';
+
+@riverpod
+int page(PageRef ref) {
+  return 0;
+}
+
+class ChotesList extends ConsumerStatefulWidget {
   const ChotesList({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final chotes = ref.watch(chotesProvider).valueOrNull;
+  ConsumerState<ChotesList> createState() => _ChotesListState();
+}
+
+class _ChotesListState extends ConsumerState<ChotesList> {
+  @override
+  Widget build(BuildContext context) {
+    final chotes = ref.watch(chotesListProvider).valueOrNull;
 
     if (chotes == null) return const SizedBox();
 
@@ -18,15 +31,13 @@ class ChotesList extends ConsumerWidget {
         itemCount: chotes.length,
         itemBuilder: (context, index) {
           final chote = chotes[index];
-          final nextChote = chotes.elementAtOrNull(index);
+          final nextChote = chotes.elementAtOrNull(index +1);
 
           final List<Widget> children = [];
 
-          if (chote.createdDate != null &&
-              chote.createdDate?.day != nextChote?.createdDate?.day) {
-            children.add(Text(DateFormat("EEE, MMM d")
-                .format(chote.createdDate!)
-                .toString()));
+          if (chote.createdDate.day != nextChote?.createdDate.day) {
+            children.add(Text(
+                DateFormat("EEE, MMM d").format(chote.createdDate).toString()));
           }
 
           children.add(ProviderScope(

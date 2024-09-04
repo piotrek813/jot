@@ -1,9 +1,12 @@
+import 'package:drift_db_viewer/drift_db_viewer.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:jot_notes/service/auth_service.dart/auth_service.dart';
+import 'package:jot_notes/drift/database.dart';
 import 'package:jot_notes/service/chote_service.dart';
 import 'package:jot_notes/ui/chote/chote_tile.dart';
 import 'package:jot_notes/ui/form/edit_text_field.dart';
+import 'package:jot_notes/ui/search/search_screen.dart';
 
 class ChatAppBar extends ConsumerWidget implements PreferredSizeWidget {
   const ChatAppBar({super.key});
@@ -13,26 +16,26 @@ class ChatAppBar extends ConsumerWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final authService = ref.watch(authServiceProvider);
-    final photo = authService.currentUser?.photoURL;
-
-    final ImageProvider image;
-
-    if (photo == null) {
-      image = const AssetImage('assets/camus.jpg');
-    } else {
-      image = NetworkImage(photo);
-    }
-
     return AppBar(
-      leading: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: CircleAvatar(
-          foregroundImage: image,
-        ),
-      ),
+      automaticallyImplyLeading: false,
       title: const Text("Moje notatki"),
-      actions: [IconButton(onPressed: () {}, icon: const Icon(Icons.search))],
+      actions: [
+        if (!kReleaseMode)
+          IconButton(
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) =>
+                        DriftDbViewer(ref.read(driftProvider))));
+              },
+              icon: const Icon(Icons.dataset)),
+        IconButton(
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return const SearchScreen();
+              }));
+            },
+            icon: const Icon(Icons.search))
+      ],
     );
   }
 }

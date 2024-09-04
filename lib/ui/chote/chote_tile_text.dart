@@ -8,7 +8,7 @@ import 'package:jot_notes/ui/chote/chote_tile.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 const _textStyle =
-    TextStyle(color: AacColors.white, fontSize: 14.0, height: 1.5);
+    TextStyle(color: AacColors.white, fontSize: 16.0, height: 1.5);
 
 class ChoteText extends StatelessWidget {
   final String text;
@@ -62,6 +62,7 @@ class ChoteText extends StatelessWidget {
             text: s,
             style: const TextStyle(
                 decoration: TextDecoration.underline,
+                decorationThickness: 1.8,
                 decorationColor: AacColors.white),
             recognizer: TapGestureRecognizer()
               ..onTap = () => openUrl(Uri.parse(s))));

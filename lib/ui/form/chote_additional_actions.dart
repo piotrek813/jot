@@ -48,14 +48,6 @@ class ChoteAdditionalActions extends ConsumerWidget {
               const Text("Galeria")
             ],
           ),
-          Column(
-            children: [
-              IconButton(
-                  onPressed: () {},
-                  icon: const Icon(Icons.notifications_rounded)),
-              const Text("Przypominajka")
-            ],
-          ),
         ],
       ),
     );

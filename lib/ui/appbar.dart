@@ -1,4 +1,5 @@
 import 'package:drift_db_viewer/drift_db_viewer.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jot_notes/drift/database.dart';
@@ -15,23 +16,18 @@ class ChatAppBar extends ConsumerWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    const ImageProvider image = AssetImage('assets/icon/icon.png');
-
     return AppBar(
-      leading: const Padding(
-        padding: EdgeInsets.all(8.0),
-        child: CircleAvatar(
-          foregroundImage: image,
-        ),
-      ),
+      automaticallyImplyLeading: false,
       title: const Text("Moje notatki"),
       actions: [
-        IconButton(
-            onPressed: () {
-              Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => DriftDbViewer(ref.read(driftProvider))));
-            },
-            icon: const Icon(Icons.dataset)),
+        if (!kReleaseMode)
+          IconButton(
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) =>
+                        DriftDbViewer(ref.read(driftProvider))));
+              },
+              icon: const Icon(Icons.dataset)),
         IconButton(
             onPressed: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) {

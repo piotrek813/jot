@@ -27,6 +27,7 @@ dependencies:
   drift_db_viewer: ^2.1.0
   flutter_launcher_icons: "^0.13.1"
   flutter_link_previewer: ^3.2.2
+  url_launcher: ^6.3.0
 
 dev_dependencies:
   flutter_test:

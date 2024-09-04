@@ -1,7 +1,11 @@
+import 'dart:developer';
+
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jot_notes/config/colors.dart';
 import 'package:jot_notes/ui/chote/chote_tile.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ChoteTileText extends ConsumerWidget {
   const ChoteTileText({super.key});
@@ -13,6 +17,21 @@ class ChoteTileText extends ConsumerWidget {
     }
   }
 
+  void openUrl(Uri url) async {
+  try {
+
+    if (!url.isScheme("HTTPS")) {
+      url = Uri.parse("https://$url");
+    }
+
+    if ((await canLaunchUrl(url))) {
+      launchUrl(url, mode: LaunchMode.externalApplication);
+    }
+  } catch(_) {
+    log("Something went wrong, couldn't launch url");
+  }
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final chote = ref.watch(currentChoteProvider);
@@ -21,6 +40,46 @@ class ChoteTileText extends ConsumerWidget {
 
     final isLong = chote.text.length > maxLength + 200;
     final excerpt = isLong ? chote.text.substring(0, maxLength) : null;
+
+    final text = excerpt ?? chote.text;
+
+    final linkRegex = RegExp(
+        r"(https?:\/\/(www\.)?)?[-a-zA-Z0-9@:%.,_\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\,+.~#?&=]*)");
+    final links = linkRegex.allMatches(text);
+
+    final List<InlineSpan> textSpans = [];
+    if (links.isEmpty) {
+      textSpans.add(TextSpan(text: text));
+    }
+
+    int lastIndex = 0;
+    List<String> textParts = [];
+
+    // Split the text keeping URLs
+    for (final match in links) {
+      if (match.start > lastIndex) {
+        textParts.add(text.substring(lastIndex, match.start));
+      }
+      textParts.add(match.group(0)!); // Add the URL itself
+      lastIndex = match.end;
+    }
+
+    if (lastIndex < text.length) {
+      textParts.add(text.substring(lastIndex));
+    }
+
+    for (final s in textParts) {
+      if (linkRegex.hasMatch(s)) {
+        textSpans.add(TextSpan(
+            text: s,
+            style: const TextStyle(decoration: TextDecoration.underline),
+            recognizer: TapGestureRecognizer()
+              ..onTap = () => openUrl(Uri.parse(s))));
+
+        continue;
+      }
+      textSpans.add(TextSpan(text: s));
+    }
 
     return Material(
       child: InkWell(
@@ -40,7 +99,7 @@ class ChoteTileText extends ConsumerWidget {
                   Flexible(
                     child: Text.rich(
                       TextSpan(children: [
-                        TextSpan(text: excerpt ?? chote.text),
+                        ...textSpans,
                         if (isLong)
                           const TextSpan(
                               text: "... Czytaj więcej",

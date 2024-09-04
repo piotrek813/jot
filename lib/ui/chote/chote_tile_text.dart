@@ -72,7 +72,7 @@ class ChoteTileText extends ConsumerWidget {
       if (linkRegex.hasMatch(s)) {
         textSpans.add(TextSpan(
             text: s,
-            style: const TextStyle(decoration: TextDecoration.underline),
+            style: const TextStyle(decoration: TextDecoration.underline, decorationColor: AacColors.white),
             recognizer: TapGestureRecognizer()
               ..onTap = () => openUrl(Uri.parse(s))));
 
@@ -107,7 +107,7 @@ class ChoteTileText extends ConsumerWidget {
                       ]),
                       softWrap: true,
                       style: const TextStyle(
-                          color: AacColors.white, fontSize: 12.0, height: 1.5),
+                          color: AacColors.white, fontSize: 14.0, height: 1.5),
                     ),
                   ),
                   const SizedBox(

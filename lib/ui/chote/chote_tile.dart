@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter_link_previewer/flutter_link_previewer.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jot_notes/model/chote.dart';
+import 'package:jot_notes/ui/chote/chote_link_preview.dart';
 import 'package:jot_notes/ui/chote/chote_tile_images.dart';
 import 'package:jot_notes/ui/chote/chote_tile_text.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -79,7 +78,7 @@ class ChoteTile extends ConsumerWidget {
   const ChoteTile({super.key});
 
   String? getLink(String input) {
-    return RegExp(regexLink).firstMatch(input)?[0];
+    return linkRegex.firstMatch(input)?[0];
   }
 
   @override
@@ -101,45 +100,19 @@ class ChoteTile extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              if (link != null)  ChoteLinkPreview(link: link),
+              if (link != null)
+                ConstrainedBox(
+                    constraints:
+                        const BoxConstraints(minHeight: 40, maxHeight: 120),
+                    child: ChoteLinkPreview(link)),
               if (chote.files.isNotEmpty)
                 const FractionallySizedBox(
                     widthFactor: 0.8, child: ChoteTileImages()),
-              if (chote.text.isNotEmpty)
-                const Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    ChoteTileText(),
-                  ],
-                ),
+              if (chote.text.isNotEmpty) const ChoteTileText(),
             ],
           ),
         ),
       ),
-    );
-  }
-}
-
-class ChoteLinkPreview extends StatefulWidget {
-final  String link;
-  const ChoteLinkPreview({super.key, required this.link});
-
-  @override
-  State<ChoteLinkPreview> createState() => _ChoteLinkPreviewState();
-}
-
-class _ChoteLinkPreviewState extends State<ChoteLinkPreview> {
-  dynamic previewData;
-
-  @override
-  Widget build(BuildContext context) {
-    return LinkPreview(
-      onPreviewDataFetched: (data) {
-        previewData = data;
-      },
-      previewData: previewData,
-      text: widget.link,
-      width: MediaQuery.of(context).size.width,
     );
   }
 }

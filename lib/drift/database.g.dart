@@ -679,19 +679,319 @@ class ChoteTagCompanion extends UpdateCompanion<ChoteTagData> {
   }
 }
 
+class $LinkPreviewItemsTable extends LinkPreviewItems
+    with TableInfo<$LinkPreviewItemsTable, LinkPreviewItem> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $LinkPreviewItemsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _titleMeta = const VerificationMeta('title');
+  @override
+  late final GeneratedColumn<String> title = GeneratedColumn<String>(
+      'title', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _descriptionMeta =
+      const VerificationMeta('description');
+  @override
+  late final GeneratedColumn<String> description = GeneratedColumn<String>(
+      'description', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _imageMeta = const VerificationMeta('image');
+  @override
+  late final GeneratedColumn<String> image = GeneratedColumn<String>(
+      'image', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _urlMeta = const VerificationMeta('url');
+  @override
+  late final GeneratedColumn<String> url = GeneratedColumn<String>(
+      'url', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns => [id, title, description, image, url];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'link_preview_items';
+  @override
+  VerificationContext validateIntegrity(Insertable<LinkPreviewItem> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('title')) {
+      context.handle(
+          _titleMeta, title.isAcceptableOrUnknown(data['title']!, _titleMeta));
+    } else if (isInserting) {
+      context.missing(_titleMeta);
+    }
+    if (data.containsKey('description')) {
+      context.handle(
+          _descriptionMeta,
+          description.isAcceptableOrUnknown(
+              data['description']!, _descriptionMeta));
+    } else if (isInserting) {
+      context.missing(_descriptionMeta);
+    }
+    if (data.containsKey('image')) {
+      context.handle(
+          _imageMeta, image.isAcceptableOrUnknown(data['image']!, _imageMeta));
+    } else if (isInserting) {
+      context.missing(_imageMeta);
+    }
+    if (data.containsKey('url')) {
+      context.handle(
+          _urlMeta, url.isAcceptableOrUnknown(data['url']!, _urlMeta));
+    } else if (isInserting) {
+      context.missing(_urlMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  LinkPreviewItem map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return LinkPreviewItem(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      title: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}title'])!,
+      description: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}description'])!,
+      image: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}image'])!,
+      url: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}url'])!,
+    );
+  }
+
+  @override
+  $LinkPreviewItemsTable createAlias(String alias) {
+    return $LinkPreviewItemsTable(attachedDatabase, alias);
+  }
+}
+
+class LinkPreviewItem extends DataClass implements Insertable<LinkPreviewItem> {
+  final int id;
+  final String title;
+  final String description;
+  final String image;
+  final String url;
+  const LinkPreviewItem(
+      {required this.id,
+      required this.title,
+      required this.description,
+      required this.image,
+      required this.url});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['title'] = Variable<String>(title);
+    map['description'] = Variable<String>(description);
+    map['image'] = Variable<String>(image);
+    map['url'] = Variable<String>(url);
+    return map;
+  }
+
+  LinkPreviewItemsCompanion toCompanion(bool nullToAbsent) {
+    return LinkPreviewItemsCompanion(
+      id: Value(id),
+      title: Value(title),
+      description: Value(description),
+      image: Value(image),
+      url: Value(url),
+    );
+  }
+
+  factory LinkPreviewItem.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return LinkPreviewItem(
+      id: serializer.fromJson<int>(json['id']),
+      title: serializer.fromJson<String>(json['title']),
+      description: serializer.fromJson<String>(json['description']),
+      image: serializer.fromJson<String>(json['image']),
+      url: serializer.fromJson<String>(json['url']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'title': serializer.toJson<String>(title),
+      'description': serializer.toJson<String>(description),
+      'image': serializer.toJson<String>(image),
+      'url': serializer.toJson<String>(url),
+    };
+  }
+
+  LinkPreviewItem copyWith(
+          {int? id,
+          String? title,
+          String? description,
+          String? image,
+          String? url}) =>
+      LinkPreviewItem(
+        id: id ?? this.id,
+        title: title ?? this.title,
+        description: description ?? this.description,
+        image: image ?? this.image,
+        url: url ?? this.url,
+      );
+  LinkPreviewItem copyWithCompanion(LinkPreviewItemsCompanion data) {
+    return LinkPreviewItem(
+      id: data.id.present ? data.id.value : this.id,
+      title: data.title.present ? data.title.value : this.title,
+      description:
+          data.description.present ? data.description.value : this.description,
+      image: data.image.present ? data.image.value : this.image,
+      url: data.url.present ? data.url.value : this.url,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('LinkPreviewItem(')
+          ..write('id: $id, ')
+          ..write('title: $title, ')
+          ..write('description: $description, ')
+          ..write('image: $image, ')
+          ..write('url: $url')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, title, description, image, url);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is LinkPreviewItem &&
+          other.id == this.id &&
+          other.title == this.title &&
+          other.description == this.description &&
+          other.image == this.image &&
+          other.url == this.url);
+}
+
+class LinkPreviewItemsCompanion extends UpdateCompanion<LinkPreviewItem> {
+  final Value<int> id;
+  final Value<String> title;
+  final Value<String> description;
+  final Value<String> image;
+  final Value<String> url;
+  const LinkPreviewItemsCompanion({
+    this.id = const Value.absent(),
+    this.title = const Value.absent(),
+    this.description = const Value.absent(),
+    this.image = const Value.absent(),
+    this.url = const Value.absent(),
+  });
+  LinkPreviewItemsCompanion.insert({
+    this.id = const Value.absent(),
+    required String title,
+    required String description,
+    required String image,
+    required String url,
+  })  : title = Value(title),
+        description = Value(description),
+        image = Value(image),
+        url = Value(url);
+  static Insertable<LinkPreviewItem> custom({
+    Expression<int>? id,
+    Expression<String>? title,
+    Expression<String>? description,
+    Expression<String>? image,
+    Expression<String>? url,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (title != null) 'title': title,
+      if (description != null) 'description': description,
+      if (image != null) 'image': image,
+      if (url != null) 'url': url,
+    });
+  }
+
+  LinkPreviewItemsCompanion copyWith(
+      {Value<int>? id,
+      Value<String>? title,
+      Value<String>? description,
+      Value<String>? image,
+      Value<String>? url}) {
+    return LinkPreviewItemsCompanion(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      description: description ?? this.description,
+      image: image ?? this.image,
+      url: url ?? this.url,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (title.present) {
+      map['title'] = Variable<String>(title.value);
+    }
+    if (description.present) {
+      map['description'] = Variable<String>(description.value);
+    }
+    if (image.present) {
+      map['image'] = Variable<String>(image.value);
+    }
+    if (url.present) {
+      map['url'] = Variable<String>(url.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('LinkPreviewItemsCompanion(')
+          ..write('id: $id, ')
+          ..write('title: $title, ')
+          ..write('description: $description, ')
+          ..write('image: $image, ')
+          ..write('url: $url')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
   late final $ChoteItemsTable choteItems = $ChoteItemsTable(this);
   late final $TagItemsTable tagItems = $TagItemsTable(this);
   late final $ChoteTagTable choteTag = $ChoteTagTable(this);
+  late final $LinkPreviewItemsTable linkPreviewItems =
+      $LinkPreviewItemsTable(this);
   late final ChoteDao choteDao = ChoteDao(this as AppDatabase);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities =>
-      [choteItems, tagItems, choteTag];
+      [choteItems, tagItems, choteTag, linkPreviewItems];
 }
 
 typedef $$ChoteItemsTableCreateCompanionBuilder = ChoteItemsCompanion Function({
@@ -1235,6 +1535,153 @@ typedef $$ChoteTagTableProcessedTableManager = ProcessedTableManager<
     (ChoteTagData, $$ChoteTagTableReferences),
     ChoteTagData,
     PrefetchHooks Function({bool choteId, bool tagId})>;
+typedef $$LinkPreviewItemsTableCreateCompanionBuilder
+    = LinkPreviewItemsCompanion Function({
+  Value<int> id,
+  required String title,
+  required String description,
+  required String image,
+  required String url,
+});
+typedef $$LinkPreviewItemsTableUpdateCompanionBuilder
+    = LinkPreviewItemsCompanion Function({
+  Value<int> id,
+  Value<String> title,
+  Value<String> description,
+  Value<String> image,
+  Value<String> url,
+});
+
+class $$LinkPreviewItemsTableFilterComposer
+    extends FilterComposer<_$AppDatabase, $LinkPreviewItemsTable> {
+  $$LinkPreviewItemsTableFilterComposer(super.$state);
+  ColumnFilters<int> get id => $state.composableBuilder(
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get title => $state.composableBuilder(
+      column: $state.table.title,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get description => $state.composableBuilder(
+      column: $state.table.description,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get image => $state.composableBuilder(
+      column: $state.table.image,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get url => $state.composableBuilder(
+      column: $state.table.url,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+}
+
+class $$LinkPreviewItemsTableOrderingComposer
+    extends OrderingComposer<_$AppDatabase, $LinkPreviewItemsTable> {
+  $$LinkPreviewItemsTableOrderingComposer(super.$state);
+  ColumnOrderings<int> get id => $state.composableBuilder(
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get title => $state.composableBuilder(
+      column: $state.table.title,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get description => $state.composableBuilder(
+      column: $state.table.description,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get image => $state.composableBuilder(
+      column: $state.table.image,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get url => $state.composableBuilder(
+      column: $state.table.url,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+}
+
+class $$LinkPreviewItemsTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $LinkPreviewItemsTable,
+    LinkPreviewItem,
+    $$LinkPreviewItemsTableFilterComposer,
+    $$LinkPreviewItemsTableOrderingComposer,
+    $$LinkPreviewItemsTableCreateCompanionBuilder,
+    $$LinkPreviewItemsTableUpdateCompanionBuilder,
+    (
+      LinkPreviewItem,
+      BaseReferences<_$AppDatabase, $LinkPreviewItemsTable, LinkPreviewItem>
+    ),
+    LinkPreviewItem,
+    PrefetchHooks Function()> {
+  $$LinkPreviewItemsTableTableManager(
+      _$AppDatabase db, $LinkPreviewItemsTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer:
+              $$LinkPreviewItemsTableFilterComposer(ComposerState(db, table)),
+          orderingComposer:
+              $$LinkPreviewItemsTableOrderingComposer(ComposerState(db, table)),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<String> title = const Value.absent(),
+            Value<String> description = const Value.absent(),
+            Value<String> image = const Value.absent(),
+            Value<String> url = const Value.absent(),
+          }) =>
+              LinkPreviewItemsCompanion(
+            id: id,
+            title: title,
+            description: description,
+            image: image,
+            url: url,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required String title,
+            required String description,
+            required String image,
+            required String url,
+          }) =>
+              LinkPreviewItemsCompanion.insert(
+            id: id,
+            title: title,
+            description: description,
+            image: image,
+            url: url,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$LinkPreviewItemsTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $LinkPreviewItemsTable,
+    LinkPreviewItem,
+    $$LinkPreviewItemsTableFilterComposer,
+    $$LinkPreviewItemsTableOrderingComposer,
+    $$LinkPreviewItemsTableCreateCompanionBuilder,
+    $$LinkPreviewItemsTableUpdateCompanionBuilder,
+    (
+      LinkPreviewItem,
+      BaseReferences<_$AppDatabase, $LinkPreviewItemsTable, LinkPreviewItem>
+    ),
+    LinkPreviewItem,
+    PrefetchHooks Function()>;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -1245,6 +1692,8 @@ class $AppDatabaseManager {
       $$TagItemsTableTableManager(_db, _db.tagItems);
   $$ChoteTagTableTableManager get choteTag =>
       $$ChoteTagTableTableManager(_db, _db.choteTag);
+  $$LinkPreviewItemsTableTableManager get linkPreviewItems =>
+      $$LinkPreviewItemsTableTableManager(_db, _db.linkPreviewItems);
 }
 
 // **************************************************************************

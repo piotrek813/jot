@@ -10,6 +10,9 @@ import 'package:url_launcher/url_launcher.dart';
 const _textStyle =
     TextStyle(color: AacColors.white, fontSize: 16.0, height: 1.5);
 
+final linkRegex = RegExp(
+    r"(https?:\/\/(www\.)?)?[-a-zA-Z0-9@:%.,_\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\,+.~#?&\/\/=]*)");
+
 class ChoteText extends StatelessWidget {
   final String text;
   final List<InlineSpan>? children;
@@ -31,8 +34,6 @@ class ChoteText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final linkRegex = RegExp(
-        r"(https?:\/\/(www\.)?)?[-a-zA-Z0-9@:%.,_\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\,+.~#?&\/\/=]*)");
     final links = linkRegex.allMatches(text);
 
     final List<InlineSpan> textSpans = [];

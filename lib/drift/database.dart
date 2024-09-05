@@ -1,7 +1,9 @@
 import 'package:drift/drift.dart';
 import 'package:drift_flutter/drift_flutter.dart';
+import 'package:flutter/foundation.dart';
 import 'package:jot_notes/drift/converters/list_converter.dart';
 import 'package:jot_notes/drift/daos/chote_dao.dart';
+import 'package:jot_notes/drift/schema_versions.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'database.g.dart';
@@ -24,15 +26,59 @@ class TagItems extends Table {
   DateTimeColumn get createdAt => dateTime().withDefault(currentDate)();
 }
 
-@DriftDatabase(tables: [ChoteItems, TagItems, ChoteTag], daos: [ChoteDao])
+class LinkPreviewItems extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  TextColumn get title => text()();
+  TextColumn get description => text()();
+  TextColumn get image => text()();
+  TextColumn get url => text()();
+}
+
+@DriftDatabase(
+    tables: [ChoteItems, TagItems, ChoteTag, LinkPreviewItems],
+    daos: [ChoteDao])
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
 
   static QueryExecutor _openConnection() {
     return driftDatabase(name: 'main');
+  }
+
+  @override
+  MigrationStrategy get migration {
+    return MigrationStrategy(
+      onCreate: (Migrator m) async {
+        await m.createAll();
+      },
+      onUpgrade: (m, from, to) async {
+        // Run migration steps without foreign keys and re-enable them later
+        // (https://drift.simonbinder.eu/docs/advanced-features/migrations/#tips)
+        await customStatement('PRAGMA foreign_keys = OFF');
+
+        await m.runMigrationSteps(
+          from: from,
+          to: to,
+          steps: migrationSteps(
+            from1To2: (m, schema) async {
+              await m.createTable(schema.linkPreviewItems);
+            },
+          ),
+        );
+
+        if (kDebugMode) {
+          // Fail if the migration broke foreign keys
+          final wrongForeignKeys =
+              await customSelect('PRAGMA foreign_key_check').get();
+          assert(wrongForeignKeys.isEmpty,
+              '${wrongForeignKeys.map((e) => e.data)}');
+        }
+
+        await customStatement('PRAGMA foreign_keys = ON;');
+      },
+    );
   }
 }
 

@@ -79,8 +79,6 @@ LinkPreviewService linkPreviewService(LinkPreviewServiceRef ref) {
 @riverpod
 Future<LinkPreview> linkPreview(LinkPreviewRef ref, String url) {
   final service = ref.watch(linkPreviewServiceProvider);
-  print(url);
-  print(service.get(Uri.parse(url)));
 
   return service.get(Uri.parse(url));
 }

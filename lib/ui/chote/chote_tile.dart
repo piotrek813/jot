@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jot_notes/model/chote.dart';
-import 'package:jot_notes/service/link_preview_service.dart';
+import 'package:jot_notes/ui/chote/chote_link_preview.dart';
 import 'package:jot_notes/ui/chote/chote_tile_images.dart';
 import 'package:jot_notes/ui/chote/chote_tile_text.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -100,66 +100,17 @@ class ChoteTile extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              if (link != null) ChoteLinkPreview(link),
+              if (link != null)
+                ConstrainedBox(
+                    constraints:
+                        const BoxConstraints(minHeight: 40, maxHeight: 120),
+                    child: ChoteLinkPreview(link)),
               if (chote.files.isNotEmpty)
                 const FractionallySizedBox(
                     widthFactor: 0.8, child: ChoteTileImages()),
-              if (chote.text.isNotEmpty)
-                const Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    ChoteTileText(),
-                  ],
-                ),
+              if (chote.text.isNotEmpty) const ChoteTileText(),
             ],
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class ChoteLinkPreview extends ConsumerWidget {
-  final String link;
-
-  const ChoteLinkPreview(this.link, {super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final preview = ref.watch(linkPreviewProvider(link)).valueOrNull;
-
-    if (preview == null) return const SizedBox();
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-      child: SizedBox(
-        height: 120,
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Flexible(
-              flex: 1,
-              child: Image.network(
-                preview.image,
-                fit: BoxFit.cover,
-              ),
-            ),
-            const SizedBox(width: 4,),
-            Flexible(
-              flex: 2,
-              child: Column(
-                children: [
-                  Text(preview.title,
-                      style: Theme.of(context).textTheme.titleSmall),
-                  const SizedBox(height: 4),
-                  Text(
-                    preview.description.length > 100 ?
-                    "${preview.description.substring(0, 100)}..." : preview.description,
-                  )
-                ],
-              ),
-            )
-          ],
         ),
       ),
     );

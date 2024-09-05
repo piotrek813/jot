@@ -13,24 +13,24 @@ const _textStyle =
 final linkRegex = RegExp(
     r"(https?:\/\/(www\.)?)?[-a-zA-Z0-9@:%.,_\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\,+.~#?&\/\/=]*)");
 
+void openUrl(Uri url) async {
+  try {
+    if (!url.isScheme("HTTPS")) {
+      url = Uri.parse("https://$url");
+    }
+
+    if ((await canLaunchUrl(url))) {
+      launchUrl(url, mode: LaunchMode.externalApplication);
+    }
+  } catch (_) {
+    log("Something went wrong, couldn't launch url");
+  }
+}
+
 class ChoteText extends StatelessWidget {
   final String text;
   final List<InlineSpan>? children;
   const ChoteText(this.text, {super.key, this.children});
-
-  void openUrl(Uri url) async {
-    try {
-      if (!url.isScheme("HTTPS")) {
-        url = Uri.parse("https://$url");
-      }
-
-      if ((await canLaunchUrl(url))) {
-        launchUrl(url, mode: LaunchMode.externalApplication);
-      }
-    } catch (_) {
-      log("Something went wrong, couldn't launch url");
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -93,6 +93,15 @@ class ChoteTileText extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final chote = ref.watch(currentChoteProvider);
 
+    final BorderRadiusGeometry border;
+
+    if (chote.files.isNotEmpty || linkRegex.hasMatch(chote.text)) {
+      border = const BorderRadius.only(
+          bottomRight: Radius.circular(6.0), bottomLeft: Radius.circular(6.0));
+    } else {
+      border = BorderRadius.circular(6.0);
+    }
+
     const maxLength = 300;
 
     final isLong = chote.text.length > maxLength + 200;
@@ -104,9 +113,8 @@ class ChoteTileText extends ConsumerWidget {
       child: InkWell(
         onTap: () => _showFullText(context, chote.text, isLong),
         child: Ink(
-          decoration: BoxDecoration(
-              color: AacColors.primary,
-              borderRadius: BorderRadius.circular(6.0)),
+          decoration:
+              BoxDecoration(color: AacColors.primary, borderRadius: border),
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: ConstrainedBox(

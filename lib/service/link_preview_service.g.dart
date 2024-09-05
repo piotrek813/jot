@@ -43,7 +43,7 @@ final linkPreviewServiceProvider =
 );
 
 typedef LinkPreviewServiceRef = AutoDisposeProviderRef<LinkPreviewService>;
-String _$linkPreviewHash() => r'97d21cd4b46692f2a7d6a7149735dbb615620e7f';
+String _$linkPreviewHash() => r'a1e598e12e53ec48baddbcc0563dd722a4ed1930';
 
 /// Copied from Dart SDK
 class _SystemHash {

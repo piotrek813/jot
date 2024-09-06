@@ -108,7 +108,7 @@ class ChoteTile extends ConsumerWidget {
               if (chote.files.isNotEmpty)
                 const FractionallySizedBox(
                     widthFactor: 0.8, child: ChoteTileImages()),
-              if (chote.text.isNotEmpty) const ChoteTileText(),
+              if (chote.text.isNotEmpty) const Align(alignment: Alignment.centerRight,child: ChoteTileText()),
             ],
           ),
         ),

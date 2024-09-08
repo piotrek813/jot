@@ -48,8 +48,8 @@ final hasImage = preview.image.isNotEmpty;
                       style: Theme.of(context).textTheme.titleSmall),
                   const SizedBox(height: 4),
                   Text(
-                    preview.description.length > 100
-                        ? "${preview.description.substring(0, 100)}..."
+                    preview.description.length > 80
+                        ? "${preview.description.substring(0, 80)}..."
                         : preview.description,
                   )
                 ],

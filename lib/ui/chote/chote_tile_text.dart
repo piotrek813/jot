@@ -39,39 +39,40 @@ class ChoteText extends StatelessWidget {
     final List<InlineSpan> textSpans = [];
     if (links.isEmpty) {
       textSpans.add(TextSpan(text: text));
-    }
+    } else {
+      int lastIndex = 0;
+      List<String> textParts = [];
 
-    int lastIndex = 0;
-    List<String> textParts = [];
-
-    // Split the text keeping URLs
-    for (final match in links) {
-      if (match.start > lastIndex) {
-        textParts.add(text.substring(lastIndex, match.start));
+      // Split the text keeping URLs
+      for (final match in links) {
+        if (match.start > lastIndex) {
+          textParts.add(text.substring(lastIndex, match.start));
+        }
+        textParts.add(match.group(0)!); // Add the URL itself
+        lastIndex = match.end;
       }
-      textParts.add(match.group(0)!); // Add the URL itself
-      lastIndex = match.end;
-    }
 
-    if (lastIndex < text.length) {
-      textParts.add(text.substring(lastIndex));
-    }
-
-    for (final s in textParts) {
-      if (linkRegex.hasMatch(s)) {
-        textSpans.add(TextSpan(
-            text: s,
-            style: const TextStyle(
-                decoration: TextDecoration.underline,
-                decorationThickness: 1.8,
-                decorationColor: AacColors.white),
-            recognizer: TapGestureRecognizer()
-              ..onTap = () => openUrl(Uri.parse(s))));
-
-        continue;
+      if (lastIndex < text.length) {
+        textParts.add(text.substring(lastIndex));
       }
-      textSpans.add(TextSpan(text: s));
+
+      for (final s in textParts) {
+        if (linkRegex.hasMatch(s)) {
+          textSpans.add(TextSpan(
+              text: s,
+              style: const TextStyle(
+                  decoration: TextDecoration.underline,
+                  decorationThickness: 1.8,
+                  decorationColor: AacColors.white),
+              recognizer: TapGestureRecognizer()
+                ..onTap = () => openUrl(Uri.parse(s))));
+
+          continue;
+        }
+        textSpans.add(TextSpan(text: s));
+      }
     }
+
     return Text.rich(
       TextSpan(children: [...textSpans, ...?children]),
       style: _textStyle,

@@ -32,23 +32,29 @@ class ChoteAdditionalActions extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final showAdditionalActions = ref.watch(showAdditionalActionsProvider);
 
-    if (!showAdditionalActions) return const SizedBox();
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          Column(
+    return AnimatedSize(
+      duration: const Duration(milliseconds: 150 ),
+      curve: Curves.decelerate,
+      child: SizedBox(
+        height: showAdditionalActions ? 100 : 0,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              IconButton(
-                  onPressed:
-                      ref.read(choteFilePickerProvider.notifier).pickMultiImages,
-                  icon: const Icon(Icons.photo)),
-              const Text("Galeria")
+              Column(
+                children: [
+                  IconButton(
+                      onPressed: ref
+                          .read(choteFilePickerProvider.notifier)
+                          .pickMultiImages,
+                      icon: const Icon(Icons.photo)),
+                  const Text("Galeria")
+                ],
+              ),
             ],
           ),
-        ],
+        ),
       ),
     );
   }
